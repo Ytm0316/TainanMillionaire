@@ -1,0 +1,55 @@
+<html>
+	<head>
+		<title>My first three.js app</title>
+		<style>
+			body,html { margin: 0; overflow:hidden;}
+			canvas { width: 100%; height: 100% }
+		</style>
+	</head>
+	<body>
+		<script src="d:/desktop/TainanMillionaire/public/js/build/three.js"></script>
+		<script src="d:/desktop/TainanMillionaire/public/js/dat.gui.min.js"></script>
+		<script src="d:/desktop/TainanMillionaire/public/js/helpers/AxesHelper.js"></script>
+		<script>
+			var gui;
+			var axes_helper = new THREE.AxesHelper(5);
+	
+			(function(){gui={}; var datGui = new dat.GUI();})();
+			var scene = new THREE.Scene();
+			scene.background = new THREE.Color(0xbce2e5);
+			var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
+			camera.lookAt(new THREE.Vector3(0,0,0));
+			camera.position.set(1,1,10);
+			var renderer = new THREE.WebGLRenderer();
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			document.body.appendChild( renderer.domElement );
+
+			//var geometry = new THREE.BoxGeometry( 1, 1, 1 );
+			//var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+			//var cube = new THREE.Mesh( geometry, material );
+			var MAX_POINTS = 500;// geometry
+			var geometry = new THREE.BufferGeometry();// attributes
+			var positions = new Float32Array( MAX_POINTS * 3 ); // 3 vertices per point
+			geometry.addAttribute( 'position', new THREE.BufferAttribute( positions, 3 ) );// draw range
+			var drawCount = 2; // draw the first 2 points, only
+			geometry.setDrawRange( 0, drawCount );// material
+			var material = new THREE.LineBasicMaterial( { color: 0xff0000, linewidth: 2 } );// line
+			var line = new THREE.Line( geometry,  material );
+			scene.add( line );
+		
+		
+			scene.add( axes_helper);
+
+			var animate = function () {
+				requestAnimationFrame( animate );
+
+			//	mesh.rotation.x += 0.1;
+			//	cube.rotation.y += 0.1;
+//
+				renderer.render(scene, camera);
+			};
+
+			animate();
+		</script>
+	</body>
+</html>

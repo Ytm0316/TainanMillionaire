@@ -1,0 +1,73 @@
+<html>
+	<head>
+		<title>TainanMillionaire</title>
+		<link rel="icon" type="image/png" href="favicon/fav1/favicon-16.png">
+		
+		<style>
+			body,html { margin: 0; overflow:hidden;}
+			canvas { width: 100%; height: 100% }
+		</style>
+	</head>
+	<body>
+		<script src="js/build/three.js"></script>
+		<script src="js/OBJloader.js"></script>
+		<script src="js/dat.gui.min.js"></script>
+		<script src="js/helpers/AxesHelper.js"></script>
+		<script>
+			var gui;
+			var axes_helper ;
+			var scene ;
+			var camera ;
+			var renderer ;
+			var loader ;
+			var chess;
+			init();//initialize some default setup..
+			animate(); //render the scene;
+			
+			function animate(){
+			requestAnimationFrame(animate);
+			renderer.render(scene,camera);
+			chess.rotation.x+=0.1;
+			}
+			function init(){
+			(function(){gui={}; var datGui = new dat.GUI();})();
+			axes_helper = new THREE.AxesHelper(5);
+			scene = new THREE.Scene();
+			scene.background = new THREE.Color(0x99bbff);
+			camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
+			renderer = new THREE.WebGLRenderer();
+			loader = new THREE.OBJLoader();
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			document.body.appendChild( renderer.domElement );
+			scene.add( axes_helper);
+			camera.position.set(20,10,150);
+			loader.load(
+			'obj/Jumper.obj',// resource URL
+			function(object){// called when resource is loaded
+			console.log('loading');
+			object.traverse( function ( child ) {
+			//This allow us to check if the children is an instance of the Mesh constructor
+			if(child instanceof THREE.Mesh){
+			console.log('colored');
+			child.material = new THREE.MeshBasicMaterial( {color: 0xa5e587} );
+			//Sometimes there are some vertex normals missing in the .obj files, ThreeJs will compute them
+			child.geometry.computeVertexNormals();//??
+			}
+			});
+			chess = object;
+			chess.position.set(0,0,0);
+			scene.add(chess);
+			},
+			function(xhr){// called when loading is in progresses
+			console.log ((xhr.loaded/xhr.total*100)+'% loaded');
+			},
+			function ( error ) {
+			console.log( 'An error happened' );
+			}
+			
+			);
+			}
+
+		</script>
+	</body>
+</html>
