@@ -130,9 +130,15 @@ must be imported by index.html
 					window.addEventListener( 'resize', onWindowResize, false );
 		
 			}
-
+		function touchdown(){
+			if(!jump_info.fly)	jump_info.ready = true; //ready to fly,increase speed
+		};
+		
+		function touchup(){
+			jump_info.fly = true; //fly!
+		};
 		function mousedown(){
-		if(!jump_info.fly)	jump_info.ready = true; //ready to fly,increase speed
+			if(!jump_info.fly)	jump_info.ready = true; //ready to fly,increase speed
 		};
 		
 		function mouseup(){
