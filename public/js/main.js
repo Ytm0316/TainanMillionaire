@@ -73,8 +73,8 @@ must be imported by index.html
 				jump_info.flying();	
 				
 				//camera follow
-				camera.position.set((cube[0].position.x ) ,200,(cube[0].position.z +200 ));
-				camera.lookAt(  new THREE.Vector3((cube[0].position.x+200),0,cube[0].position.z) );
+				camera.position.set((cube[0].position.x -125) ,200,(cube[0].position.z +125 ));
+				camera.lookAt(  new THREE.Vector3((cube[0].position.x+75),0,cube[0].position.z-75) );
 			}
 			if(jump_info.ready){//increase horizontal speed
 				jump_info.cheer();
@@ -118,7 +118,7 @@ must be imported by index.html
 				
 				quickLoad('obj/horse.obj',0,
 				function(obj){
-					obj.position.set(-200,0,0);
+					obj.position.set(-75,0,75);
 					obj.rotation.x = -Math.PI/2;
 					obj.traverse(
 						function(child){
