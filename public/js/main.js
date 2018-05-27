@@ -73,8 +73,8 @@ must be imported by index.html
 				jump_info.flying();	
 				
 				//camera follow
-				camera.position.set((cube[0].position.x -200 ) ,200,(cube[0].position.z +200 ));
-				camera.lookAt(  new THREE.Vector3(cube[0].position.x,0,cube[0].position.z) );
+				camera.position.set((cube[0].position.x ) ,200,(cube[0].position.z +200 ));
+				camera.lookAt(  new THREE.Vector3((cube[0].position.x+200),0,cube[0].position.z) );
 			}
 			if(jump_info.ready){//increase horizontal speed
 				jump_info.cheer();
@@ -88,10 +88,12 @@ must be imported by index.html
 			
 			}
 			function init(){
+				/*
 				(function(){
 					gui={}; 
 					var datGui = new dat.GUI();//add control plane. no use
 				})();
+				*/
 				gridHelper = new THREE.GridHelper( 1000, 20 );
 				axes_helper = new THREE.AxesHelper(20);
 				scene = new THREE.Scene();
@@ -116,7 +118,7 @@ must be imported by index.html
 				
 				quickLoad('obj/horse.obj',0,
 				function(obj){
-					obj.position.set(0,0,0);
+					obj.position.set(-200,0,0);
 					obj.rotation.x = -Math.PI/2;
 					obj.traverse(
 						function(child){
