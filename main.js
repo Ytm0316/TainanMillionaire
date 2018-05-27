@@ -114,7 +114,7 @@ must be imported by index.html
 
 				
 				
-				quickLoad('obj/Horse.obj',0,
+				quickLoad('obj/horse.obj',0,
 				function(obj){
 					obj.position.set(0,0,0);
 					obj.rotation.x = -Math.PI/2;
