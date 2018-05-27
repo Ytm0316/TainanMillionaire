@@ -73,7 +73,7 @@ must be imported by index.html
 				jump_info.flying();	
 				
 				//camera follow
-				camera.position.set((cube[0].position.x -50 ) ,50,(cube[0].position.z +50 ));
+				camera.position.set((cube[0].position.x -200 ) ,200,(cube[0].position.z +200 ));
 				camera.lookAt(  new THREE.Vector3(cube[0].position.x,0,cube[0].position.z) );
 			}
 			if(jump_info.ready){//increase horizontal speed
@@ -109,12 +109,12 @@ must be imported by index.html
 				document.body.appendChild( renderer.domElement );
 				scene.add( axes_helper);
 				scene.add( gridHelper );
-				camera.position.set(-50,50,50);
+				camera.position.set(-200,200,200);
 				camera.lookAt(new THREE.Vector3(0,0,0));
 
 				
 				
-				quickLoad('obj/Horse.obj',0,
+				quickLoad('obj/horse.obj',0,
 				function(obj){
 					obj.position.set(0,0,0);
 					obj.rotation.x = -Math.PI/2;
