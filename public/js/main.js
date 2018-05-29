@@ -97,7 +97,7 @@ must be imported by index.html
 				gridHelper = new THREE.GridHelper( 1000, 20 );
 				axes_helper = new THREE.AxesHelper(20);
 				scene = new THREE.Scene();
-				scene.background = new THREE.Color(0x000000);
+				scene.background = new THREE.Color(0x8eedd8);
 				/*
 				camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
 				// use orthogono camera might be better for our game.
