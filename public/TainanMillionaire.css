@@ -1,0 +1,179 @@
+/*initial page*/
+.logo{
+	height:25%;
+	position:absolute;
+	top:23%;
+	left:50%;
+	transform:translate(-50%);
+	/*display:none;*/
+}
+
+.slogan{
+	font-family:DFKai-sb;
+	color:#000000;
+	font-size:45px;
+	font-weight:bold;
+	position:absolute;
+	top:48%;
+	left:50%;
+	transform:translate(-50%);
+	/*display:none;*/
+}
+
+.fb{
+	color:#ffffff;
+	font-size:18px;
+	background-color:#004b97;
+	font-family:arial;
+	border:0px;
+	position:absolute;
+	height:50px;
+	width:350px;
+	top:80%;
+	left:50%;
+	transform:translate(-50%);
+	/*display:none;*/
+}
+
+.skip{
+	color:#000000;
+	font-size:18px;
+	background-color:#e0e0e0;
+	font-family:arial;
+	position:absolute;
+	height:50px;
+	width:172px;
+	top:88%;
+	left:50%;
+	transform:translate(-102%);
+	/*display:none;*/
+}
+
+.sign{
+	color:#000000;
+	font-size:18px;
+	background-color:#e0e0e0;
+	font-family:arial;
+	position:absolute;
+	height:50px;
+	width:172px;
+	top:88%;
+	left:50%;
+	transform:translate(+2%);
+	/*display:none;*/
+}
+
+/*sign page*/
+.signintitle{
+	color:#ff0000;
+	font-size:20px;
+	font-family:arial;
+	position:absolute;
+	top:5%;
+	left:50%;
+	transform:translate(-50%);
+	display:none;
+}
+
+.email{
+	color:#bebebe;
+	font-size:18px;
+	font-family:arial;
+	position:absolute;
+	height:50px;
+	width:300px;
+	top:11%;
+	left:50%;
+	transform:translate(-50%);
+	display:none;
+}
+
+.password{
+	color:#bebebe;
+	font-size:18px;
+	font-family:arial;
+	position:absolute;
+	height:50px;
+	width:300px;
+	top:18.5%;
+	left:50%;
+	transform:translate(-50%);
+	display:none;
+}
+
+.signin{
+	color:#ffffff;
+	font-size:18px;
+	background-color:#ff0000;
+	font-family:arial;
+	position:absolute;
+	height:50px;
+	width:300px;
+	top:29%;
+	left:50%;
+	transform:translate(-50%);
+	display:none;
+}
+
+.createaccount{
+	color:#ff0000;
+	font-size:18px;
+	background-color:rgba(255,255,255,0.0);
+	font-family:arial;
+	position:absolute;
+	height:50px;
+	width:300px;
+	top:39.5%;
+	left:50%;
+	transform:translate(-50%);
+	display:none;
+}
+
+/*relay page*/
+.welcome{
+	color:#ff0000;
+	font-size:35px;
+	font-family:arial;
+	position:absolute;
+	top:8%;
+	left:50%;
+	transform:translate(-50%);
+	display:none;
+}
+
+.welcomepagesubtitle{
+	color:#000000;
+	font-size:25px;
+	font-family:Microsoft JhengHei;
+	position:absolute;
+	top:15%;
+	left:50%;
+	transform:translate(-50%);
+	display:none;
+}
+
+.example{
+	height:45%;
+	position:absolute;
+	top:55%;
+	left:50%;
+	transform:translate(-50%);
+	display:none;
+}
+
+.go{
+	color:#ffffff;
+	font-size:18px;
+	text-align:center;
+	line-height:38px;
+	background-color:#ff0000;
+	font-family:arial;
+	position:absolute;
+	height:38px;
+	width:375px;
+	top:90%;
+	left:50%;
+	transform:translate(-50%);
+	display:none;
+}
+
