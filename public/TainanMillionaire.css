@@ -1,14 +1,13 @@
 /*initial page*/
-.logo{
+#logo{
 	height:25%;
 	position:absolute;
 	top:23%;
 	left:50%;
 	transform:translate(-50%);
-	/*display:none;*/
 }
 
-.slogan{
+#slogan{
 	font-family:DFKai-sb;
 	color:#000000;
 	font-size:45px;
@@ -17,10 +16,9 @@
 	top:48%;
 	left:50%;
 	transform:translate(-50%);
-	/*display:none;*/
 }
 
-.fb{
+#fb{
 	color:#ffffff;
 	font-size:18px;
 	background-color:#004b97;
@@ -32,10 +30,9 @@
 	top:80%;
 	left:50%;
 	transform:translate(-50%);
-	/*display:none;*/
 }
 
-.skip{
+#skip{
 	color:#000000;
 	font-size:18px;
 	background-color:#e0e0e0;
@@ -46,10 +43,11 @@
 	top:88%;
 	left:50%;
 	transform:translate(-102%);
-	/*display:none;*/
+	z-index:2;
+	cursor:pointer;
 }
 
-.sign{
+#sign{
 	color:#000000;
 	font-size:18px;
 	background-color:#e0e0e0;
@@ -60,11 +58,10 @@
 	top:88%;
 	left:50%;
 	transform:translate(+2%);
-	/*display:none;*/
 }
 
 /*sign page*/
-.signintitle{
+#signintitle{
 	color:#ff0000;
 	font-size:20px;
 	font-family:arial;
@@ -72,10 +69,9 @@
 	top:5%;
 	left:50%;
 	transform:translate(-50%);
-	display:none;
 }
 
-.email{
+#email{
 	color:#bebebe;
 	font-size:18px;
 	font-family:arial;
@@ -85,10 +81,9 @@
 	top:11%;
 	left:50%;
 	transform:translate(-50%);
-	display:none;
 }
 
-.password{
+#password{
 	color:#bebebe;
 	font-size:18px;
 	font-family:arial;
@@ -98,10 +93,9 @@
 	top:18.5%;
 	left:50%;
 	transform:translate(-50%);
-	display:none;
 }
 
-.signin{
+#signin{
 	color:#ffffff;
 	font-size:18px;
 	background-color:#ff0000;
@@ -112,10 +106,9 @@
 	top:29%;
 	left:50%;
 	transform:translate(-50%);
-	display:none;
 }
 
-.createaccount{
+#createaccount{
 	color:#ff0000;
 	font-size:18px;
 	background-color:rgba(255,255,255,0.0);
@@ -126,11 +119,10 @@
 	top:39.5%;
 	left:50%;
 	transform:translate(-50%);
-	display:none;
 }
 
 /*relay page*/
-.welcome{
+#welcome{
 	color:#ff0000;
 	font-size:35px;
 	font-family:arial;
@@ -138,10 +130,9 @@
 	top:8%;
 	left:50%;
 	transform:translate(-50%);
-	display:none;
 }
 
-.welcomepagesubtitle{
+#welcomepagesubtitle{
 	color:#000000;
 	font-size:25px;
 	font-family:Microsoft JhengHei;
@@ -149,19 +140,17 @@
 	top:15%;
 	left:50%;
 	transform:translate(-50%);
-	display:none;
 }
 
-.example{
+#example{
 	height:45%;
 	position:absolute;
 	top:55%;
 	left:50%;
 	transform:translate(-50%);
-	display:none;
 }
 
-.go{
+#go{
 	color:#ffffff;
 	font-size:18px;
 	text-align:center;
@@ -174,6 +163,6 @@
 	top:90%;
 	left:50%;
 	transform:translate(-50%);
-	display:none;
+	cursor:pointer;
 }
 
