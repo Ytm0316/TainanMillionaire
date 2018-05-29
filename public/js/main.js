@@ -213,18 +213,18 @@ must be imported by index.html
 		
 			}
 		function touchdown(){
-			if(!jump_info.fly)	jump_info.ready = true; //ready to fly,increase speed
+			if(!jump_info.fly&&ifstart==1)	jump_info.ready = true; //ready to fly,increase speed
 		};
 		
 		function touchup(){
-			jump_info.fly = true; //fly!
+			if(ifstart==1)jump_info.fly = true; //fly!
 		};
 		function mousedown(){
-			if(!jump_info.fly)	jump_info.ready = true; //ready to fly,increase speed
+			if(!jump_info.fly&&ifstart==1)	jump_info.ready = true; //ready to fly,increase speed
 		};
 		
 		function mouseup(){
-			jump_info.fly = true; //fly!
+			if(ifstart==1)jump_info.fly = true; //fly!
 		};
 		
 		function quickLoad(url,num,callback){
