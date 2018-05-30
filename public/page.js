@@ -2,7 +2,7 @@
 
 var ifstart=0;
 
-
+var temporarybackground=document.getElementById("temporarybackground");
 var logo=document.getElementById("logo");
 var slogan=document.getElementById("slogan");
 var fb=document.getElementById("fb");
@@ -46,6 +46,7 @@ skip.onclick = function(){
 }
 
 go.onclick = function(){
+	temporarybackground.style.display="none";
 	welcome.style.display="none";
 	welcomepagesubtitle.style.display="none";
 	example.style.display="none";

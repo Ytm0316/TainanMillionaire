@@ -1,4 +1,34 @@
 /*initial page*/
+#temporarybackground{
+	position:absolute;
+	width:100%;
+	height:100%;
+	background-color:#ffffff;
+}
+
+#screenborder{
+	position:absolute;
+	width:410px;
+	height:99%;
+	background-color:#5b5b5b;
+	border:1px #4f4f4f solid;
+	border-radius: 15px;
+	top:1%;
+	left:50%;
+	transform:translate(-50%);
+}
+
+#screen{
+	position:absolute;
+	width:390px;
+	height:88.5%;
+	background-color:#ffffff;
+	border:1px #000000 solid;
+	top:8.5%;
+	left:50%;
+	transform:translate(-50%);
+}
+
 #logo{
 	height:25%;
 	position:absolute;
@@ -36,6 +66,8 @@
 	color:#000000;
 	font-size:18px;
 	background-color:#e0e0e0;
+	border:1px #01b468 solid;
+	border-radius:5px;
 	font-family:arial;
 	position:absolute;
 	height:50px;
@@ -51,6 +83,8 @@
 	color:#000000;
 	font-size:18px;
 	background-color:#e0e0e0;
+	border:1px #ae0000 solid;
+	border-radius:5px;
 	font-family:arial;
 	position:absolute;
 	height:50px;
@@ -69,6 +103,10 @@
 	top:5%;
 	left:50%;
 	transform:translate(-50%);
+}
+
+#signform{
+	position:absolute;
 }
 
 #email{
@@ -156,6 +194,7 @@
 	text-align:center;
 	line-height:38px;
 	background-color:#ff0000;
+	border-radius: 5px;
 	font-family:arial;
 	position:absolute;
 	height:38px;
@@ -165,4 +204,3 @@
 	transform:translate(-50%);
 	cursor:pointer;
 }
-
