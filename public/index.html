@@ -15,6 +15,7 @@
 	</head>
 	<body onmousedown="mousedown();" onmouseup="mouseup();" ontouchstart="touchdown();" ontouchend="touchup();">
 	<!--initial page-->
+		<div id="temporarybackground"></div>
 		<img src="logo.png" id="logo"></img>
 		<div id="slogan">上馬 跑台南！</div>
 		<button id="fb">Continue with Facebook</button>
@@ -22,7 +23,7 @@
 		<button onclick="sign()" id="sign">Sign Up</button>
 	<!--sign page-->
 		<div id="signintitle">Sign in With Email</div>
-		<form action="/get_data" method="get">
+		<form id="signform">
 			<input name="email" type="text" placeholder="  Email" align="right" id="email"><br>
 			<input name="password" type="text" placeholder="  Password" id="password"><br>
 			<button type="submit" id="signin">Sign In</button>
