@@ -177,3 +177,87 @@
 	display:none;
 }
 
+.reborn{
+	color:#ffffff;
+	font-size:60px;
+	text-align:center;
+	line-height:38px;
+	background-color:#ffc1078f;
+	font-family:arial;
+	position:absolute;
+	height:50px;
+	width:350px;
+	top:20%;
+	left:50%;
+	transform:translate(-50%);
+	display:none;
+
+}
+
+.content{
+
+	color:#ffffff;
+	font-size:40px;
+	text-align:center;
+	line-height:38px;
+	background-color:#ffc1078f;
+	font-family:arial;
+	position:absolute;
+	height:350px;
+	width:550px;
+	top:30%;
+	left:50%;
+	transform:translate(-50%);
+	display:none;
+
+
+}
+.selectA{
+    	color:#ff0000;
+	font-size:60px;
+	font-family:arial;
+	position:absolute;
+	width:100px;
+	top:75%;
+	left:25%;
+	transform:translate(-50%);
+	display:none;
+}
+
+.selectB{
+	color:#ff0000;
+	font-size:60px;
+	font-family:arial;
+	position:absolute;
+	width:100px;
+	top:75%;
+	left:41%;
+	transform:translate(-50%);
+	display:none;
+}
+
+.selectC{
+	color:#ff0000;
+	font-size:60px;
+	font-family:arial;
+	position:absolute;
+	width:100px;
+	top:75%;
+	left:59%;
+	transform:translate(-50%);
+	display:none;
+}
+
+.selectD{
+	color:#ff0000;
+	font-size:60px;
+	font-family:arial;
+	position:absolute;
+	width:100px;
+	top:75%;
+	left:75%;
+	transform:translate(-50%);
+	display:none;
+}
+
+
