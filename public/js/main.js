@@ -9,7 +9,11 @@ file above might has different path.  not case sensitive of jsfiles...
 
 must be imported by index.html 
 
-*/
+*/			var light_helper;
+			var light;
+			var light2;
+			var light2_helper;
+			var ambient;
 			var gui;
 			var gridHelper ;
 			var axes_helper ; 
@@ -20,6 +24,7 @@ must be imported by index.html
 			var	light ;	
 			var light_helper;			
 			var cube=[];// 0 for jumper .
+			var cube_color_order=1;
 			var frustumSize = 200;
 			var jump_info={
 				gaming:true,//temp
@@ -130,6 +135,8 @@ must be imported by index.html
 					jump_info.flying();	
 				
 				//camera follow
+					light.position.set((cube[0].position.x -25) ,300,(cube[0].position.z +25 ));
+					light2.position.set((cube[0].position.x -25) ,250,(cube[0].position.z +225 ))
 					camera.position.set((cube[0].position.x -125) ,200,(cube[0].position.z +125 ));
 					camera.lookAt(  new THREE.Vector3((cube[0].position.x+75),0,cube[0].position.z-75) );
 				}
@@ -155,76 +162,133 @@ must be imported by index.html
 			
 			}// end of animate
 			function init(){
-				/*
-				(function(){
-					gui={}; 
-					var datGui = new dat.GUI();//add control plane. no use
-				})();
-				*/
+				var aspect = window.innerWidth / window.innerHeight;
+				renderer = new THREE.WebGLRenderer();
+				scene = new THREE.Scene();
+				loader = new THREE.OBJLoader();
 				gridHelper = new THREE.GridHelper( 1000, 20 );
 				axes_helper = new THREE.AxesHelper(20);
-				scene = new THREE.Scene();
+				camera = new THREE.OrthographicCamera( frustumSize * aspect / - 1, frustumSize * aspect / 1, frustumSize / 1, frustumSize / - 1, 1, 2000 );			
+				ambient = new THREE.AmbientLight(0xfffd87);
+				light = new THREE.PointLight( 0xffffff, 2, 500);
+				light2 = new THREE.PointLight( 0xffffff, 1, 500);
+				light_helper = new THREE.CameraHelper( light.shadow.camera );
+				light2_helper = new THREE.CameraHelper( light2.shadow.camera );
 				scene.background = new THREE.Color(0x4286f4);
+				light.position.set( -100, 300, 100 );
+				light.castShadow = true;
+				light2.position.set( -100, 250, 300 );
+				light2.castShadow = true;
+				
+				
+				//-----------------------------------------------
+				light.shadow.mapSize.width = 512;  // default
+				light.shadow.mapSize.height = 512; // default
+				light.shadow.camera.near = 0.5;       // default
+				light.shadow.camera.far = 500      // default
+				
+				light2.shadow.mapSize.width = 512;  // default
+				light2.shadow.mapSize.height = 512; // default
+				light2.shadow.camera.near = 0.5;       // default
+				light2.shadow.camera.far = 500      // default
+				
+			
+				//-----------------------------------------------
 				/*
 				camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
 				// use orthogono camera might be better for our game.
 				*/
-				var aspect = window.innerWidth / window.innerHeight;
-				camera = new THREE.OrthographicCamera( frustumSize * aspect / - 1, frustumSize * aspect / 1, frustumSize / 1, frustumSize / - 1, 1, 2000 );
 				
-				renderer = new THREE.WebGLRenderer();
-		
-				loader = new THREE.OBJLoader();
+				
+				
+				renderer.shadowMap.enabled = true;
+				renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+				renderer.setPixelRatio( window.devicePixelRatio );
 				renderer.setSize( window.innerWidth, window.innerHeight );
 				document.body.appendChild( renderer.domElement );
-				scene.add( axes_helper);
-				scene.add( gridHelper );
+				
+
 				camera.position.set(-200,200,200);
 				camera.lookAt(new THREE.Vector3(0,0,0));
-				//make some cube here. only to demo
+				//make some cube here. only to demo//////////////////
 				var bg = new THREE.BoxGeometry(50,20,50);
-				var m1 = new THREE.MeshBasicMaterial({color: 0x00ff00});
+				var m1 = new THREE.MeshStandardMaterial({color: 0x00ff00});
 				var cb1 = new THREE.Mesh(bg,m1);	
 				var cb2 = new THREE.Mesh(bg,m1);
 				var	cb3 = new THREE.Mesh(bg,m1);			
 				scene.add(cb1);	scene.add(cb2);scene.add(cb3);
 				cb1.position.set(-75,-10,75);
 				cb2.position.set(0,-10,75);
-	
 				cb3.position.set(0,-10,150);
+				cb1.receiveShadow = true;
+				cb2.receiveShadow = true;
+				cb3.receiveShadow = true;
 				cube[1] = { x_max:-50,x_min:-100,z_max:100,z_min:50,jump_direction:1,related: cb1};
 				cube[2] = { x_max:25,x_min:-25,z_max:100,z_min:50,jump_direction:2,related:	cb2};
-		
 				cube[3] = { x_max:25,x_min:-25,z_max:175,z_min:125,jump_direction:1,related: cb3};
-				//
+				///////////////////////////////////////////////
 				quickLoad('obj/horse.obj',0,
 				function(obj){
 					obj.position.set(-75,0,75);
 					obj.rotation.x = -Math.PI/2;
+
 					obj.traverse(
 						function(child){
-							if(child instanceof THREE.Mesh){
-
-								child.material = new THREE.MeshBasicMaterial( {color: 0xa5e587} );
+							if(child instanceof THREE.Mesh){//child.material = new THREE.MeshBasicMaterial( {color: 0xa5e587} );
+								child.castShadow = true; //default is false
+								child.receiveShadow = false; //default
+								if(cube_color_order==1){
+									child.material = new THREE.MeshStandardMaterial( {color: 0xff0000} );
+									cube_color_order++;
+								}
+								
+								else if(cube_color_order==5){
+									child.material = new THREE.MeshStandardMaterial( {color: 0xffff00} );
+									cube_color_order++;
+									
+								}
+								
+								else if(cube_color_order==4){
+									child.material = new THREE.MeshStandardMaterial( {color: 0xffbf00} );
+									cube_color_order++;
+								}
+								
+								else if(cube_color_order==11||cube_color_order==12){
+									child.material = new THREE.MeshStandardMaterial( {color: 0xffffff} );
+									cube_color_order++;
+								}
+			
+								else{
+									child.material = new THREE.MeshStandardMaterial( {color: 0x232323} );
+									cube_color_order++;
+								}
+								
 							}
 						});
 				});
-					window.addEventListener( 'resize', onWindowResize, false );
-		
+				window.addEventListener( 'resize', onWindowResize, false );
+				scene.add(ambient);
+				scene.add( light );
+				scene.add( light_helper );
+				scene.add( axes_helper);
+				scene.add( gridHelper );
+				scene.add( light2);
+				scene.add( light2_helper );
+				
 			}
 		function touchdown(){
-			if(!jump_info.fly&&ifstart==1)	jump_info.ready = true; //ready to fly,increase speed
+			if(!jump_info.fly)	jump_info.ready = true; //ready to fly,increase speed
 		};
 		
 		function touchup(){
-			if(ifstart==1)jump_info.fly = true; //fly!
+			jump_info.fly = true; //fly!
 		};
 		function mousedown(){
-			if(!jump_info.fly&&ifstart==1)	jump_info.ready = true; //ready to fly,increase speed
+			if(!jump_info.fly)	jump_info.ready = true; //ready to fly,increase speed
 		};
 		
 		function mouseup(){
-			if(ifstart==1)jump_info.fly = true; //fly!
+			jump_info.fly = true; //fly!
 		};
 		
 		function quickLoad(url,num,callback){
@@ -235,6 +299,7 @@ must be imported by index.html
 					who can make the horse 's rotation point in the center.Please help
 				*/
 				callback(object);
+				cube_color_order=1;//this may cause problem..
 				cube[num] = object;
 				scene.add(cube[num]);
 			},
