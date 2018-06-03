@@ -367,7 +367,7 @@ var Jump = function(){
 					mesh.position.x = 	mesh.geometry.parameters.width/2 + 
 										this.cube_set.cube[this.cube_set.cube.length-1].geometry.parameters.width/2+
 										this.cube_set.cube[this.cube_set.cube.length-1].position.x+
-										Math.random()*40+20;
+										Math.random()*90+45;
 					mesh.position.y =  this.cube_set.cube[this.cube_set.cube.length-1].position.y;
 					mesh.position.z =  this.cube_set.cube[this.cube_set.cube.length-1].position.z;				
 				}else if(this.CubeDir.current=='left'){
@@ -376,14 +376,14 @@ var Jump = function(){
 					mesh.position.z =  (-mesh.geometry.parameters.width/2)-
 										this.cube_set.cube[this.cube_set.cube.length-1].geometry.parameters.width/2+
 										this.cube_set.cube[this.cube_set.cube.length-1].position.z
-										-Math.random()*40-20;
+										-Math.random()*90-45;
 				}else{
 					mesh.position.x =  this.cube_set.cube[this.cube_set.cube.length-1].position.x;
 					mesh.position.y =  this.cube_set.cube[this.cube_set.cube.length-1].position.y;
 					mesh.position.z =  (mesh.geometry.parameters.width/2)+
 										this.cube_set.cube[this.cube_set.cube.length-1].position.z+
 										this.cube_set.cube[this.cube_set.cube.length-1].geometry.parameters.width/2+
-										Math.random()*40+20;
+										Math.random()*90+45;
 				}	
 			}else{
 				mesh.position.set(-75,-10,75);//default horse position
