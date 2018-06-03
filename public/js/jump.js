@@ -313,16 +313,16 @@ var Jump = function(){
 				z: game.cameraPos.next.z
 			};
 			if(n.x>c.x||n.z>c.z||n.z<c.z){
-				game.cameraPos.current.x +=1;
+				game.cameraPos.current.x +=3;
 				if(n.z>=c.z){
-					game.cameraPos.current.z += 1;
+					game.cameraPos.current.z += 3;
 				}else if(n.z<=c.z){
-					game.cameraPos.current.z -= 1;
+					game.cameraPos.current.z -= 3;
 				}
-				if(Math.abs(game.cameraPos.current.x - game.cameraPos.next.x)<1.2){
+				if(Math.abs(game.cameraPos.current.x - game.cameraPos.next.x)<3.5){
 					game.cameraPos.current.x = game.cameraPos.next.x;
 				}
-				if(Math.abs(game.cameraPos.current.z - game.cameraPos.next.z)<1.2){
+				if(Math.abs(game.cameraPos.current.z - game.cameraPos.next.z)<3.5){
 					game.cameraPos.current.z = game.cameraPos.next.z;
 				}
 				game.camera.position.set(c.x-200,200,c.z+200);
