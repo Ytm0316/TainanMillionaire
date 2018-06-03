@@ -68,7 +68,7 @@ var Jump = function(){
 	Jump.prototype = {
 		init:function(){
 			this.checkUserAgent();
-			this.createHelpers();//create helpers	
+			//this.createHelpers();//create helpers	
 			this.LightSetup();//create lights.
 			this.RendererSetup();
 			this.CameraSetup();
@@ -190,7 +190,7 @@ var Jump = function(){
 			var game = this;
 			if(!game.jumperStat.ready&&game.cube_set.horse.scale.z>0.5&&game.play){
 				game.cube_set.horse.scale.z -= 0.01;
-				game.jumperStat.h_speed += 0.03;
+				game.jumperStat.h_speed += 0.035;
 				game.jumperStat.y_speed += 0.04;
 				console.log('down');
 				game.renderer.render(game.scene,game.camera);
