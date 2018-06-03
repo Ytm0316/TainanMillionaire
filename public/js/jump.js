@@ -2,15 +2,18 @@ var Jump = function(){
 	this.config = {
 		isMobile:false,
 		jumper_length:30,
-		jumper_width:14,
-		jumper_height:40,
+		jumper_width:18,
+		jumper_height:46,//該數值影響落點判斷的難度
 		frustumSize:200,
-		hell_ground:-25,
+		hell_ground:-30,
+		ground_thick:10,
+		light_ref: new THREE.Vector3(100,300, 100),
+		//light2_ref: new THREE.Vector3(200, 400, 200),
 		aspect:window.innerWidth / window.innerHeight
 	};
 	this.falling = {
 		end:false,
-		speed:0.5
+		speed:1.2
 	}
 	this.cube_set = {
 		horse:[],
@@ -19,13 +22,13 @@ var Jump = function(){
 		floor:[]
 	};
 	this.light_set ={
-		light	:	new THREE.PointLight( 0xffffff, 2, 500),
-		light2	:	new THREE.PointLight( 0xffffff, 1, 500),
+		light	:	new THREE.PointLight( 0xffffff, 1.5, 500),
+		//light2	:	new THREE.PointLight( 0xffffff, 1, 500),
 		ambient : 	new THREE.AmbientLight(0xfffd87)
 	};
 	this.helpers = {
 		light_helper	: new THREE.CameraHelper( this.light_set.light.shadow.camera ),
-		light2_helper	: new THREE.CameraHelper( this.light_set.light2.shadow.camera ),
+		//light2_helper	: new THREE.CameraHelper( this.light_set.light2.shadow.camera ),
 		gridHelper 		: new THREE.GridHelper( 1000, 20 ),
 		axes_helper 	: new THREE.AxesHelper(20)
 	}
@@ -58,7 +61,7 @@ var Jump = function(){
 	this.renderer = new THREE.WebGLRenderer();
 	this.loader = new THREE.OBJLoader();
 	this.camera = new THREE.OrthographicCamera( this.config.frustumSize * this.config.aspect / - 1, this.config.frustumSize * this.config.aspect / 1, this.config.frustumSize / 1, this.config.frustumSize / - 1, 1, 2000 );			
-	this.scene.add( this.light_set.light2);			
+	//this.scene.add( this.light_set.light2);			
 	this.scene.add( this.light_set.ambient);
 	this.scene.add( this.light_set.light );	
 };
@@ -138,7 +141,7 @@ var Jump = function(){
 			var rotateAxis ;
 			var rotate ;//rotating speed
 			var rotateTo;//to specific angle
-			var fallingTo = game.config.hell_ground + game.config.jumper_width/2;//toground.
+			var fallingTo = game.config.hell_ground + game.config.jumper_width/2 + game.config.ground_thick/2;//toground.
 			if(dir=='forward2'){
 				rotateAxis = 'y';
 				rotate = game.cube_set.horse.rotation[rotateAxis] + 0.1;
@@ -161,7 +164,7 @@ var Jump = function(){
 				game.cube_set.horse.translateZ = -offset;//move horse out of the cube area
 			}else if(dir=='no'){//no sink a lot
 				rotateTo = false;
-				fallingTo = game.config.hell_ground + game.config.jumper_height/2;
+				fallingTo = game.config.hell_ground + game.config.ground_thick/2;
 			}else{
 				throw Error('Arguments Error');
 			}
@@ -324,10 +327,12 @@ var Jump = function(){
 				}
 				game.camera.position.set(c.x-200,200,c.z+200);
 				game.camera.lookAt(c.x,0,c.z);
-				game.light_set.light.position.set(c.x-100,300,c.z+100);
-				game.light_set.light2.position.set(c.x-100,300,c.z+300);
+				var light1 = this.config.light_ref;
+				//var light2 = this.config.light2_ref;
+				game.light_set.light.position.set(c.x + light1.x , light1.y , c.z + light1.z);
+				//game.light_set.light2.position.set(c.x + light2.x , light2.y , c.z + light2.z);
 				game.renderer.render(game.scene,game.camera);
-				game.floor.position.set(c.x,-15,c.z);
+				game.floor.position.set(c.x,this.config.hell_ground,c.z);
 				requestAnimationFrame(function() {
 					game.updateCamera();
 				});
@@ -339,6 +344,8 @@ var Jump = function(){
 			var material = new THREE.MeshStandardMaterial({color: 0x00ff00});
 			var geometry = new THREE.BoxGeometry(size,20,size);				
 			var mesh = new THREE.Mesh(geometry,material);
+			mesh.castShadow = true;
+			mesh.receiveShadow = true;
 			if(this.cube_set.cube.length){
 				var dir;
 				if(this.CubeDir.current=='forward'){
@@ -395,10 +402,12 @@ var Jump = function(){
 			this.camera.position.set(-200,200,200);
 			this.camera.lookAt(new THREE.Vector3(0,0,0));			
 		},
-		RendererSetup:function(){/*//done
+		RendererSetup:function(){//done
 			this.renderer.shadowMap.enabled = true;
-			this.renderer.shadowMap.type = THREE.BasicShadowMap;*/
-			this.renderer.setPixelRatio( window.devicePixelRatio );
+			this.renderer.shadowMap.type = THREE.BasicShadowMap;
+			if(!this.config.isMobile){
+				this.renderer.setPixelRatio( window.devicePixelRatio );
+			}
 			this.renderer.setSize( window.innerWidth, window.innerHeight );
 			document.body.appendChild( this.renderer.domElement );						
 		},
@@ -406,29 +415,29 @@ var Jump = function(){
 			this.scene.background = new THREE.Color(0x4286f4);
 		},
 		LightSetup:function(){//done only adjust position. no add!
-			this.light_set.light.position.set( -100, 300, 100 );
-			/*this.light_set.light.castShadow = true;*/
-			this.light_set.light2.position.set( -100, 250, 300 );
-			/*this.light_set.light2.castShadow = true;*/
+			this.light_set.light.position = this.config.light_ref;
+			this.light_set.light.castShadow = true;
+			//this.light_set.light2.position = this.config.light2_ref;
+			//this.light_set.light2.castShadow = true;
 			//-----------------------------------------------
-			/*
+			
 			this.light_set.light.shadow.mapSize.width = 512;  // default
 			this.light_set.light.shadow.mapSize.height = 512; // default
 			this.light_set.light.shadow.camera.near = 0.5;       // default
 			this.light_set.light.shadow.camera.far = 500      // default
 				
-			this.light_set.light2.shadow.mapSize.width = 512;  // default
-			this.light_set.light2.shadow.mapSize.height = 512; // default
-			this.light_set.light2.shadow.camera.near = 0.5;       // default
-			this.light_set.light2.shadow.camera.far = 500      // default
-				*/
+			//this.light_set.light2.shadow.mapSize.width = 512;  // default
+			//this.light_set.light2.shadow.mapSize.height = 512; // default
+			//this.light_set.light2.shadow.camera.near = 0.5;       // default
+			//this.light_set.light2.shadow.camera.far = 500      // default
+				
 			//-----------------------------------------------		
 		},
 		createHelpers:function(){//done
 			this.scene.add( this.helpers.light_helper );
 			this.scene.add( this.helpers.axes_helper);
 			this.scene.add( this.helpers.gridHelper );
-			this.scene.add( this.helpers.light2_helper );					
+			//this.scene.add( this.helpers.light2_helper );					
 		},
 		quickLoad:function(url,num,horse_or_cube,callback){//done
 			game = this;
@@ -475,8 +484,8 @@ var Jump = function(){
 						function(child){
 							if(child instanceof THREE.Mesh){//child.material = new THREE.MeshBasicMaterial( {color: 0xa5e587} );
 
-								//child.castShadow = true; //default is false
-								//child.receiveShadow = false; //default
+								child.castShadow = true; //default is false
+								child.receiveShadow = false; //default
 								if(game.cube_set.cube_color_order==1){
 									child.material = new THREE.MeshStandardMaterial( {color: 0xff0000} );
 									game.cube_set.cube_color_order++;
@@ -522,13 +531,14 @@ var Jump = function(){
 		createfloor:function(){//done note that floor position change with updateCamera
 			var geo; 
 			if(this.config.isMobile){
-				geo = new THREE.BoxGeometry(700,10,700);
+				geo = new THREE.BoxGeometry(900,this.config.ground_thick,900);
 			}else{
-				geo = new THREE.BoxGeometry(1200,10,1200);
+				geo = new THREE.BoxGeometry(1400,this.config.ground_thick,1400);
 			}
-			var mat = new THREE.MeshBasicMaterial({color:0x7b8391});
+			var mat = new THREE.MeshToonMaterial({color:0x7b8391});
 			this.floor = new THREE.Mesh(geo,mat);
-			this.floor.position.set(0,-25,0);
+			this.floor.receiveShadow = true;
+			this.floor.position.set(0,this.config.hell_ground,0);
 			this.scene.add(this.floor);
 		},
 		restart:function(){//done 
