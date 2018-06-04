@@ -4,6 +4,6 @@ jump.start();//可以進行跳動
 jump.addFailedFn(//遊戲添加功能範例
 	function(){
 		alert('NOOB');
-		this.stop();
+		this.revive();
 	}
 );

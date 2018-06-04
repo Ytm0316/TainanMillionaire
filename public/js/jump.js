@@ -13,7 +13,11 @@ var Jump = function(){
 	};
 	this.falling = {
 		end:false,
-		speed:1.2
+		speed:1.2,
+		x_speed_nodir:0.5,
+		collide_nodir:false,
+		collide_out:false,
+		collide_type_confirm:false
 	}
 	this.cube_set = {
 		horse:[],
@@ -33,10 +37,14 @@ var Jump = function(){
 		axes_helper 	: new THREE.AxesHelper(20)
 	}
 	this.jumperStat = {
+		jump_pos_reset:false,
 		ready:	false,
 		h_speed:	0,
 		y_speed:	0,
 		position :new THREE.Vector3(0,0,0),
+	};
+	this.cubeStat = {
+		recovered:true
 	};
 	this.CubeDir = {
 		former:'forward',
@@ -56,7 +64,11 @@ var Jump = function(){
 		next:new THREE.Vector3(-200,200,200)
 	};
 	this.play = false;
-	this.stat = 1;//1 for alive,0 for gameover.
+	this.stage_info = {
+		score:0,
+		stage:0,
+		cube:0
+	};
 	this.scene = new THREE.Scene();
 	this.renderer = new THREE.WebGLRenderer();
 	this.loader = new THREE.OBJLoader();
@@ -100,7 +112,7 @@ var Jump = function(){
 				this.config.isMobile = true
 			}
 		},
-		fail_fall:function(){//done falling rotate using.
+		fail_fall:function(){//done falling rotate using.  //better for x,z direction in both every condition
 			var game = this;
 			var horse = {
 				x:game.cube_set.horse.position.x-game.config.jumper_length/2,
@@ -165,6 +177,72 @@ var Jump = function(){
 			}else if(dir=='no'){//no sink a lot
 				rotateTo = false;
 				fallingTo = game.config.hell_ground + game.config.ground_thick/2;
+				/*collide. for cube edge start*/
+				//if collide type is out,no need to collide.only move...
+				if(!game.falling.collide_type_confirm){
+					var horse = game.cube_set.horse.position;
+					var cube = game.cube_set.cube[game.cube_set.cube.length-1].position;
+					if(game.CubeDir.current=='forward'){
+						if(horse.x>cube.x){
+							game.falling.collide_out = true;
+						}
+					}else if(game.CubeDir.current=='left'){
+						if(horse.z<cube.z){
+							game.falling.collide_out = true;
+						}
+					}else{
+						if(horse.z>cube.z){
+							game.falling.collide_out = true;
+						}
+					}					
+					game.falling.collide_type_confirm = true;
+				}//confirm finished
+				if(game.CubeDir.current=='forward'){
+					if(!game.falling.collide_nodir||game.falling.collide_out){
+						game.cube_set.horse.position.x += game.falling.x_speed_nodir;
+					}else {
+						game.cube_set.horse.position.x -= game.falling.x_speed_nodir/1.5;
+					}
+				}else if(game.CubeDir.current=='left'){
+					if(!game.falling.collide_nodir||game.falling.collide_out){
+						game.cube_set.horse.position.z -= game.falling.x_speed_nodir;
+					}else{
+						game.cube_set.horse.position.z += game.falling.x_speed_nodir/1.5;
+					}
+				}else{
+					if(!game.falling.collide_nodir||game.falling.collide_out){
+						game.cube_set.horse.position.z += game.falling.x_speed_nodir;
+					}else{
+						game.cube_set.horse.position.z -= game.falling.x_speed_nodir/1.5;
+					}
+				}
+				///collide..
+				if(!game.falling.collide_nodir&&!game.falling.collide_out){
+					var cube = game.cube_set.cube;
+					var horse = game.cube_set.horse;
+					var dir_c = game.CubeDir.current;
+					var offset = (dir_c=='forward')? game.config.jumper_length : game.config.jumper_width;
+					var cube_width = cube[cube.length-1].geometry.parameters.width;
+					var horse_pos = horse.position;
+					var cube_pos = cube[cube.length-1].position;
+					var horse_pos_ref = (dir_c=='forward')? horse_pos.x : horse_pos.z;
+					var cube_pos_ref = (dir_c=='forward')? cube_pos.x : cube_pos.z;
+					var collided = (dir_c=='forward') ? ( ( cube_pos_ref - ( horse_pos_ref + offset ) ) < cube_width ) : (
+								   (dir_c=='left') ? ( ( cube_pos_ref - ( horse_pos_ref - offset ) ) < cube_width ) : 
+								   ( ( cube_pos_ref - ( horse_pos_ref + offset ) ) < cube_width ) );
+					
+					if(collided){
+						if(dir_c=='forward'){
+							horse.position.x -= 0.2;
+						}else if(dir_c=='left'){
+							horse.position.z += 0.2;
+						}else{
+							horse.position.z -= 0.2;
+						}
+						game.falling.collide_nodir = true;
+					}
+				}
+				/*collide. for cube edge end*/
 			}else{
 				throw Error('Arguments Error');
 			}
@@ -188,10 +266,22 @@ var Jump = function(){
 		},
 		mousedown:function(){//game config need to be editted.
 			var game = this;
+			var cube_cur = game.cube_set.cube[game.cube_set.cube.length-2];
 			if(!game.jumperStat.ready&&game.cube_set.horse.scale.z>0.5&&game.play){
 				game.cube_set.horse.scale.z -= 0.01;
 				game.jumperStat.h_speed += 0.035;
 				game.jumperStat.y_speed += 0.04;
+				
+				game.cube_set.horse.position.y -=0.1;//squeeze effect.
+				cube_cur.position.y -=0.1;
+				cube_cur.scale.x +=0.002;
+				cube_cur.scale.z +=0.002;
+				game.cubeStat.recovered = false;
+				game.jumperStat.jump_pos_reset = false;
+				
+				game.falling.x_speed_nodir = game.jumperStat.h_speed;//fail.no direction.type copy the speed.
+				
+				
 				console.log('down');
 				game.renderer.render(game.scene,game.camera);
 				requestAnimationFrame(function(){
@@ -199,7 +289,8 @@ var Jump = function(){
 				});
 			}
 		},
-		checkcube:function(){//done
+		checkcube:function(){//done    //forward only check x direction. left and right only check z direction. 
+							//better check both direction in all condition
 			if(this.cube_set.cube.length>1){
 				var pointH = {//horse position. note that the reference point get translated
 					x: this.cube_set.horse.position.x-this.config.jumper_length/2,
@@ -243,6 +334,9 @@ var Jump = function(){
 		mouseup:function(){//working... with fail fall
 			var game = this;
 		if(game.play){
+			if(!game.cubeStat.recovered){
+				game.cubeRecover();
+			}
 			game.jumperStat.ready = true;
 			console.log('up');
 			if(game.cube_set.horse.position.y>=0){
@@ -271,7 +365,7 @@ var Jump = function(){
 				if(game.land_info.result == 3){
 					game.createCube();
 					game.updateCamera();
-					
+					game.stage_info.cube++;
 					if(game.successCallback){
 						game.successCallback();
 					}
@@ -342,7 +436,7 @@ var Jump = function(){
 			var rand = Math.random();
 			var size = rand*20+30;//size from 30 to 50
 			var material = new THREE.MeshStandardMaterial({color: 0x00ff00});
-			var geometry = new THREE.BoxGeometry(size,20,size);				
+			var geometry = new THREE.BoxBufferGeometry(size,20,size);				
 			var mesh = new THREE.Mesh(geometry,material);
 			mesh.castShadow = true;
 			mesh.receiveShadow = true;
@@ -548,7 +642,11 @@ var Jump = function(){
 			};
 			this.falling = {
 				end:false,
-				speed:0.5
+				speed:1.2,
+				x_speed_nodir:0.5,
+				collide_nodir:false,
+				collide_out:false,
+				collide_type_confirm:false
 			};
 			var length = this.cube_set.cube.length;
 			for(var i = 0;i<length;i++){
@@ -562,6 +660,50 @@ var Jump = function(){
 			this.createCube();
 			this.createCube();
 			this.horse_create();
+		},
+		cubeRecover:function(){
+			console.log('recover');
+			var target_cube = this.cube_set.cube[this.cube_set.cube.length-2];
+			if(target_cube.position.y<-10){
+				var game = this;
+				if(!this.jumperStat.jump_pos_reset){
+					this.cube_set.horse.position.y = 0;
+					this.jumperStat.jump_pos_reset = true;
+				}else{
+					target_cube.position.y +=0.35;
+					target_cube.scale.x -=0.008;
+					target_cube.scale.z -=0.008;
+					if(target_cube.position.y>=-10){
+						target_cube.position.y = -10;
+						target_cube.scale.x = 1;
+						target_cube.scale.z = 1;					
+					}
+				}
+				requestAnimationFrame(function(){
+					game.cubeRecover();
+				});
+			}else{
+				this.cubeStat.recovered = true;
+			}
+		},
+		revive:function(){
+			this.falling = {
+				end:false,
+				speed:1.2,
+				x_speed_nodir:0.5,
+				collide_nodir:false,
+				collide_out:false,
+				collide_type_confirm:false
+			};
+			//i think no need to update camera...
+			var r = this.cube_set.cube[this.cube_set.cube.length-2].position;
+			this.cube_set.horse.position.set(r.x,r.y+10,r.z);
+			this.cube_set.horse.rotation.x = -Math.PI/2;
+			this.cube_set.horse.rotation.y = 0;
+			this.cube_set.horse.rotation.z = 0;
+			this.renderer.render(this.scene,this.camera);
+			
+			
 		},
 		gamePropertyAdd:function(to_do){
 			to_do();
