@@ -227,7 +227,7 @@ var Jump = function(){
 					var cube_pos = cube[cube.length-1].position;
 					var horse_pos_ref = (dir_c=='forward')? horse_pos.x : horse_pos.z;
 					var cube_pos_ref = (dir_c=='forward')? cube_pos.x : cube_pos.z;
-					var collided = (dir_c=='forward') ? ( ( cube_pos_ref - ( horse_pos_ref + offset ) ) < cube_width ) : (
+					var collided = (dir_c=='forward') ? ( ( cube_pos_ref - ( horse_pos_ref /*+ offset */) ) < cube_width ) : (
 								   (dir_c=='left') ? ( ( cube_pos_ref - ( horse_pos_ref - offset ) ) < cube_width ) : 
 								   ( ( cube_pos_ref - ( horse_pos_ref + offset ) ) < cube_width ) );
 					
