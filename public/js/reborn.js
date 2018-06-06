@@ -10,5 +10,4 @@ question[4] = "E" ;
 
 var RandNum = Math.floor(Math.random()*5); //←數字請填寫圖片張數的值
 var q=question[RandNum];
-document.write("<div class=/"content/">+q
-		</div>")
+document.write("q");
