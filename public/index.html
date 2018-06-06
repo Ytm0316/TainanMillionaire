@@ -4,6 +4,7 @@
 		<title>TainanMillionaire</title>
 		<link rel="icon" type="image/png" href="favicon/fav1/favicon-16.png">
 		<link href="TainanMillionaire.css" rel="stylesheet" type="text/css" media="all">
+		
 		<style>
 			body,html { 
 				margin: 0; overflow:hidden;
@@ -12,33 +13,40 @@
 			canvas { width: 100%; height: 100% }
 		</style>
 	</head>
-	<body onmousedown="mousedown();" onmouseup="mouseup();" ontouchstart="touchdown();" ontouchend="touchup();">
+	<body>
 	<!--initial page-->
-		<img src="logo.png" class="logo">
-		<div class="slogan">上馬 跑台南！</div>
-		<button  align="right"class="fb">Continue with Facebook</button>
-		<p><button align="right" class="skip">Skip</button>
-		<button align="right" class="sign">Sign Up</button></p>
+		<div id="temporarybackground"></div>
+	<!--
+		<div id="screenborder"></div>
+		<div id="screen"></div>
+	-->
+		<img src="logo.png" id="logo"></img>
+		<div id="slogan">上馬 跑台南！</div>
+		<button id="fb">Continue with Facebook</button>
+		<button onclick="skip()" id="skip">Skip</button>
+		<button onclick="sign()" id="sign">Sign Up</button>
 	<!--sign page-->
-		<div class="signintitle">Sign in With Email</div>
-		<form action="/get_data" method="get">
-			<input name="email" type="text" placeholder="  Email" align="right" class="email"><br>
-			<input name="password" type="text" placeholder="  Password" class="password"><br>
-			<button type="submit" class="signin">Sign In</button>
-			<button type="submit" class="createaccount">Need an account?</button>
+		<div id="signintitle">Sign in With Email</div>
+		<form id="signform">
+			<input name="email" type="text" placeholder="  Email" align="right" id="email"><br>
+			<input name="password" type="text" placeholder="  Password" id="password"><br>
+			<button type="submit" id="signin">Sign In</button>
+			<button type="submit" id="createaccount">Need an account?</button>
 		</form>
 	<!--relay page-->
-		<div class="welcome">Welcome!</div>
-		<div class="welcomepagesubtitle">跳躍中,不經意發現歷史</div>
-		<img src="example.jpg" class="example">
-		<div class="go">Great,let's go!</div>
-	
+		<div id="welcome">Welcome!</div>
+		<div id="welcomepagesubtitle">跳躍中,不經意發現歷史</div>
+		<img src="example.jpg" id="example"></img>
+		<div id="go" onclick="go()">Great,let's go!</div>
+		
+		<script type="text/javascript" src="page.js"></script>
 		<script src="js/build/three.js"></script>
 		<script src="js/OBJloader.js"></script>
 		<script src="js/dat.gui.min.js"></script>
 		<script src="js/helpers/AxesHelper.js"></script>
-		<script src="js/main.js"></script>
-	  
+		<script src="js/jump.js"></script>
+		<script src="js/main2.js"></script>
+		
 		<script>
       /*  
           test!!!!!!!!!!!!11
@@ -124,17 +132,5 @@
 		}
 */
 		</script>
-		<!-- reborn-->
-		<div class="reborn">reborn</div>
-		<div class="content">赤崁樓位於哪一座城市
-		<p></p><p></p>
-		A:台南 B:台北 C:台中 D:高雄
-		</div>
-		<button class="selectA">A</button>
-		<button class="selectB">B</button>
-		<button class="selectC">C</button>
-		<button class="selectD">D</button>
-
-
 	</body>
 </html>

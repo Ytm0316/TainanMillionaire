@@ -1,14 +1,43 @@
 /*initial page*/
-.logo{
+#temporarybackground{
+	position:absolute;
+	width:100%;
+	height:100%;
+	background-color:#ffffff;
+}
+
+#screenborder{
+	position:absolute;
+	width:410px;
+	height:99%;
+	background-color:#5b5b5b;
+	border:1px #4f4f4f solid;
+	border-radius: 15px;
+	top:1%;
+	left:50%;
+	transform:translate(-50%);
+}
+
+#screen{
+	position:absolute;
+	width:390px;
+	height:88.5%;
+	background-color:#ffffff;
+	border:1px #000000 solid;
+	top:8.5%;
+	left:50%;
+	transform:translate(-50%);
+}
+
+#logo{
 	height:25%;
 	position:absolute;
 	top:23%;
 	left:50%;
 	transform:translate(-50%);
-	/*display:none;*/
 }
 
-.slogan{
+#slogan{
 	font-family:DFKai-sb;
 	color:#000000;
 	font-size:45px;
@@ -17,10 +46,9 @@
 	top:48%;
 	left:50%;
 	transform:translate(-50%);
-	/*display:none;*/
 }
 
-.fb{
+#fb{
 	color:#ffffff;
 	font-size:18px;
 	background-color:#004b97;
@@ -32,13 +60,14 @@
 	top:80%;
 	left:50%;
 	transform:translate(-50%);
-	/*display:none;*/
 }
 
-.skip{
+#skip{
 	color:#000000;
 	font-size:18px;
 	background-color:#e0e0e0;
+	border:1px #01b468 solid;
+	border-radius:5px;
 	font-family:arial;
 	position:absolute;
 	height:50px;
@@ -46,13 +75,16 @@
 	top:88%;
 	left:50%;
 	transform:translate(-102%);
-	/*display:none;*/
+	z-index:2;
+	cursor:pointer;
 }
 
-.sign{
+#sign{
 	color:#000000;
 	font-size:18px;
 	background-color:#e0e0e0;
+	border:1px #ae0000 solid;
+	border-radius:5px;
 	font-family:arial;
 	position:absolute;
 	height:50px;
@@ -60,11 +92,10 @@
 	top:88%;
 	left:50%;
 	transform:translate(+2%);
-	/*display:none;*/
 }
 
 /*sign page*/
-.signintitle{
+#signintitle{
 	color:#ff0000;
 	font-size:20px;
 	font-family:arial;
@@ -72,10 +103,13 @@
 	top:5%;
 	left:50%;
 	transform:translate(-50%);
-	display:none;
 }
 
-.email{
+#signform{
+	position:absolute;
+}
+
+#email{
 	color:#bebebe;
 	font-size:18px;
 	font-family:arial;
@@ -85,10 +119,9 @@
 	top:11%;
 	left:50%;
 	transform:translate(-50%);
-	display:none;
 }
 
-.password{
+#password{
 	color:#bebebe;
 	font-size:18px;
 	font-family:arial;
@@ -98,10 +131,9 @@
 	top:18.5%;
 	left:50%;
 	transform:translate(-50%);
-	display:none;
 }
 
-.signin{
+#signin{
 	color:#ffffff;
 	font-size:18px;
 	background-color:#ff0000;
@@ -112,10 +144,9 @@
 	top:29%;
 	left:50%;
 	transform:translate(-50%);
-	display:none;
 }
 
-.createaccount{
+#createaccount{
 	color:#ff0000;
 	font-size:18px;
 	background-color:rgba(255,255,255,0.0);
@@ -126,11 +157,10 @@
 	top:39.5%;
 	left:50%;
 	transform:translate(-50%);
-	display:none;
 }
 
 /*relay page*/
-.welcome{
+#welcome{
 	color:#ff0000;
 	font-size:35px;
 	font-family:arial;
@@ -138,10 +168,9 @@
 	top:8%;
 	left:50%;
 	transform:translate(-50%);
-	display:none;
 }
 
-.welcomepagesubtitle{
+#welcomepagesubtitle{
 	color:#000000;
 	font-size:25px;
 	font-family:Microsoft JhengHei;
@@ -149,24 +178,23 @@
 	top:15%;
 	left:50%;
 	transform:translate(-50%);
-	display:none;
 }
 
-.example{
+#example{
 	height:45%;
 	position:absolute;
 	top:55%;
 	left:50%;
 	transform:translate(-50%);
-	display:none;
 }
 
-.go{
+#go{
 	color:#ffffff;
 	font-size:18px;
 	text-align:center;
 	line-height:38px;
 	background-color:#ff0000;
+	border-radius: 5px;
 	font-family:arial;
 	position:absolute;
 	height:38px;
@@ -174,90 +202,5 @@
 	top:90%;
 	left:50%;
 	transform:translate(-50%);
-	display:none;
+	cursor:pointer;
 }
-
-.reborn{
-	color:#ffffff;
-	font-size:60px;
-	text-align:center;
-	line-height:38px;
-	background-color:#ffc1078f;
-	font-family:arial;
-	position:absolute;
-	height:50px;
-	width:350px;
-	top:20%;
-	left:50%;
-	transform:translate(-50%);
-	display:none;
-
-}
-
-.content{
-
-	color:#ffffff;
-	font-size:40px;
-	text-align:center;
-	line-height:38px;
-	background-color:#ffc1078f;
-	font-family:arial;
-	position:absolute;
-	height:350px;
-	width:550px;
-	top:30%;
-	left:50%;
-	transform:translate(-50%);
-	display:none;
-
-
-}
-.selectA{
-    	color:#ff0000;
-	font-size:60px;
-	font-family:arial;
-	position:absolute;
-	width:100px;
-	top:75%;
-	left:25%;
-	transform:translate(-50%);
-	display:none;
-}
-
-.selectB{
-	color:#ff0000;
-	font-size:60px;
-	font-family:arial;
-	position:absolute;
-	width:100px;
-	top:75%;
-	left:41%;
-	transform:translate(-50%);
-	display:none;
-}
-
-.selectC{
-	color:#ff0000;
-	font-size:60px;
-	font-family:arial;
-	position:absolute;
-	width:100px;
-	top:75%;
-	left:59%;
-	transform:translate(-50%);
-	display:none;
-}
-
-.selectD{
-	color:#ff0000;
-	font-size:60px;
-	font-family:arial;
-	position:absolute;
-	width:100px;
-	top:75%;
-	left:75%;
-	transform:translate(-50%);
-	display:none;
-}
-
-
