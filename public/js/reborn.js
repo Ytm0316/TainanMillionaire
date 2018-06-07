@@ -12,7 +12,6 @@
     for (i = 0; i < k; i++) {
         q_used[i]=0;
     }
- console.log(q_used);
 function check(){
   RandNum = Math.floor(Math.random()*k);
   if(q_used[RandNum]== -1)
@@ -34,22 +33,26 @@ function reborn(){
 
     var RandNum = Math.floor(Math.random()*k); //←數字請填寫圖片張數的值
     if(q_used[RandNum]== -1)
-      {console.log("123");
-       check();}
+      {check();}
     deadtime = deadtime - 1 ;
     q_used[RandNum] = -1;
-    console.log(RandNum);
-    console.log(q_used[RandNum]);
-    console.log(deadtime);
     var aus = RandNum % 4 + 1;
     var content=document.getElementById("content" + (RandNum));
         content.style.display="block";
         select1.style.display="block";
         select2.style.display="block";
         select3.style.display="block";
-        select4.style.display="block";
+        select4.style.display="block";// 回傳函數與ans比對
         content.innerHTML = question[RandNum];
+   
+   //if答案是否正確
         
+   
+        rebor.style.display="none";
+        select1.style.display="none";
+        select2.style.display="none";
+        select3.style.display="none";
+        select4.style.display="none";
    jump.revive();
    return (aus);
   }else{
