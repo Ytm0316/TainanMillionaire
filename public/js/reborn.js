@@ -1,18 +1,20 @@
- var q_used= new Array(4);
+ var k=5  ; //問題數
+ var q_used= new Array(k-1);
  var i;
- var deadtime = 5;  //總共可以死幾次(問題數)
+ 
+ var deadtime = k;  //總共可以死幾次(問題數)
  var rebor=document.getElementById("reborn");
  var select1=document.getElementById("select1");
  var select2=document.getElementById("select2");
  var select3=document.getElementById("select3");
  var select4=document.getElementById("select4");
 
-    for (i = 0; i < 5; i++) {
+    for (i = 0; i < k; i++) {
         q_used[i]=0;
     }
  console.log(q_used);
 function check(){
-  RandNum = Math.floor(Math.random()*5);
+  RandNum = Math.floor(Math.random()*k);
   if(q_used[RandNum]== -1)
   {check();}
 
@@ -21,7 +23,7 @@ function reborn(){
   if(deadtime > 0){
     //rebor.style.display="block";
    
-    var question = new Array(4); 
+    var question = new Array(k-1); 
   
     //問題的答案請放在數字%4+1的選項  ex:第0題答案為A  第5題答案為B
     question[0] = "A" ; 
@@ -30,7 +32,7 @@ function reborn(){
     question[3] = "D" ;
     question[4] = "E" ;
 
-    var RandNum = Math.floor(Math.random()*5); //←數字請填寫圖片張數的值
+    var RandNum = Math.floor(Math.random()*k); //←數字請填寫圖片張數的值
     if(q_used[RandNum]== -1)
       {console.log("123");
        check();}
@@ -51,6 +53,10 @@ function reborn(){
    jump.revive();
    return (aus);
   }else{
+         for (i = 0; i < k; i++) {
+         q_used[i]=0;
+    }
+     deadtime = k;
      jump.restart();
      console.log("456");
    }
