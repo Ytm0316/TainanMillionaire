@@ -32,7 +32,7 @@ function reborn(){
     console.log(q_used[RandNum]);
     console.log(deadtime);
     var aus = RandNum % 4 + 1;
-    var content=document.getElementById("content" + (RandNum));
+    var content=document.getElementById("content" + (RandNum+1));
         content.innerHTML = question[RandNum];
    jump.revive();
    return (aus);
