@@ -24,7 +24,7 @@ function reborn(){
     var aus = RandNum % 4 + 1;
     var content=document.getElementById("content" + (RandNum));
         content.innerHTML = question[RandNum];
-   revive();
+   jump.revive();
    return (aus);
   }
 }
