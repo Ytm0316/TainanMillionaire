@@ -6,6 +6,6 @@ jump.addFailedFn(//遊戲添加功能範例
 		//alert('NOOB');
 		//test
 		reborn();
-		this.revive();
+		//this.revive();
 	}
 );
