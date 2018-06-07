@@ -17,7 +17,7 @@ function reborn(){
 
     var RandNum = Math.floor(Math.random()*5); //←數字請填寫圖片張數的值
     if(q_used[RandNum]== -1)
-      {reborn();}
+      {this.reborn();}
     deadtime = deadtime - 1 ;
     q_used[RandNum] = -1;
   
