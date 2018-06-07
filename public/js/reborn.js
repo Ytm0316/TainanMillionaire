@@ -4,6 +4,7 @@
     for (i = 0; i < 5; i++) {
         q_used[i]=0;
     }
+ console.log(q_used);
 function reborn(){
   if(deadtime > 0){
     var question = new Array(4); 
@@ -17,10 +18,12 @@ function reborn(){
 
     var RandNum = Math.floor(Math.random()*5); //←數字請填寫圖片張數的值
     if(q_used[RandNum]== -1)
-      {this.reborn();}
+      {console.log("123");
+       this.reborn();}
     deadtime = deadtime - 1 ;
     q_used[RandNum] = -1;
-  
+    console.log(RandNum);
+    console.log(q_used[RandNum]);
     var aus = RandNum % 4 + 1;
     var content=document.getElementById("content" + (RandNum));
         content.innerHTML = question[RandNum];
