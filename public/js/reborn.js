@@ -1,7 +1,12 @@
  var q_used= new Array(4);
  var i;
  var deadtime = 5;  //總共可以死幾次(問題數)
- var reborn=document.getElementById("reborn");
+ var rebor=document.getElementById("reborn");
+ var select1=document.getElementById("select1");
+ var select2=document.getElementById("select2");
+ var select3=document.getElementById("select3");
+ var select4=document.getElementById("select4");
+
     for (i = 0; i < 5; i++) {
         q_used[i]=0;
     }
@@ -14,7 +19,7 @@ function check(){
 }
 function reborn(){
   if(deadtime > 0){
-    //reborn.style.display="block";
+    //rebor.style.display="block";
    
     var question = new Array(4); 
   
@@ -37,6 +42,10 @@ function reborn(){
     var aus = RandNum % 4 + 1;
     var content=document.getElementById("content" + (RandNum));
         //content.style.display="block";
+        //select1.style.display="block";
+        //select2.style.display="block";
+        //select3.style.display="block";
+        //select4.style.display="block";
         content.innerHTML = question[RandNum];
         
    jump.revive();
