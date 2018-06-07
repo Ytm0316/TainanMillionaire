@@ -1,6 +1,7 @@
  var q_used= new Array(4);
  var i;
  var deadtime = 5;  //總共可以死幾次(問題數)
+ var reborn=document.getElementById("reborn");
     for (i = 0; i < 5; i++) {
         q_used[i]=0;
     }
@@ -13,6 +14,8 @@ function check(){
 }
 function reborn(){
   if(deadtime > 0){
+    //reborn.style.display="block";
+   
     var question = new Array(4); 
   
     //問題的答案請放在數字%4+1的選項  ex:第0題答案為A  第5題答案為B
@@ -33,9 +36,14 @@ function reborn(){
     console.log(deadtime);
     var aus = RandNum % 4 + 1;
     var content=document.getElementById("content" + (RandNum));
+        //content.style.display="block";
         content.innerHTML = question[RandNum];
+        
    jump.revive();
    return (aus);
-  }
+  }else{
+     jump.restart();
+     console.log("456");
+   }
 }
 
