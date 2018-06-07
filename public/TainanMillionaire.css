@@ -205,7 +205,7 @@
 	cursor:pointer;
 }
 
-.reborn{
+#reborn{
 	color:#ffffff;
 	font-size:60px;
 	text-align:center;
@@ -222,7 +222,7 @@
 
 }
 
-.content{
+#content{
 
 	color:#ffffff;
 	font-size:40px;
@@ -240,7 +240,7 @@
 
 
 }
-.selectA{
+#select1{
     	color:#ff0000;
 	font-size:60px;
 	font-family:arial;
@@ -252,7 +252,7 @@
 	display:none;
 }
 
-.selectB{
+#select2{
 	color:#ff0000;
 	font-size:60px;
 	font-family:arial;
@@ -264,7 +264,7 @@
 	display:none;
 }
 
-.selectC{
+#select3{
 	color:#ff0000;
 	font-size:60px;
 	font-family:arial;
@@ -276,7 +276,7 @@
 	display:none;
 }
 
-.selectD{
+#select4{
 	color:#ff0000;
 	font-size:60px;
 	font-family:arial;
