@@ -21,7 +21,7 @@ function check(){
 }
 function reborn(){
   if(deadtime > 0){
-    //rebor.style.display="block";
+    rebor.style.display="block";
    
     var question = new Array(k-1); 
   
@@ -43,11 +43,11 @@ function reborn(){
     console.log(deadtime);
     var aus = RandNum % 4 + 1;
     var content=document.getElementById("content" + (RandNum));
-        //content.style.display="block";
-        //select1.style.display="block";
-        //select2.style.display="block";
-        //select3.style.display="block";
-        //select4.style.display="block";
+        content.style.display="block";
+        select1.style.display="block";
+        select2.style.display="block";
+        select3.style.display="block";
+        select4.style.display="block";
         content.innerHTML = question[RandNum];
         
    jump.revive();
