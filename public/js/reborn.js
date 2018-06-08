@@ -1,13 +1,18 @@
  var k=5  ; //問題數
  var q_used= new Array(k-1);
  var i;
- 
+ var player_ans=0;
  var deadtime = k;  //總共可以死幾次(問題數)
  var rebor=document.getElementById("reborn");
  var select1=document.getElementById("select1");
  var select2=document.getElementById("select2");
  var select3=document.getElementById("select3");
  var select4=document.getElementById("select4");
+ 
+function select1(){ player_ans= 1}
+function select2(){ player_ans= 2}
+function select3(){ player_ans= 3}
+function select4(){ player_ans= 4}
 
     for (i = 0; i < k; i++) {
         q_used[i]=0;
@@ -16,8 +21,9 @@ function check(){
   RandNum = Math.floor(Math.random()*k);
   if(q_used[RandNum]== -1)
   {check();}
+    }
 
-}
+
 function reborn(){
   if(deadtime > 0){
     rebor.style.display="block";
@@ -44,23 +50,32 @@ function reborn(){
         select3.style.display="block";
         select4.style.display="block";// 回傳函數與ans比對
         content.innerHTML = question[RandNum];
-   
-   //if答案是否正確
         
-   
+        console.log("player_ans");
+        console.log("ans");
+        jump.stop();
+        if(player_ans != ans){           //if答案是否正確
+         jump.restart(); 
+         player_ans=0;
+         return ;
+        }
+        console.log("player_ans");
+ 
+        content.style.display="none";
         rebor.style.display="none";
         select1.style.display="none";
         select2.style.display="none";
         select3.style.display="none";
         select4.style.display="none";
-   jump.revive();
-   return (aus);
+        jump.start();
+         
+   //jump.revive();
   }else{
          for (i = 0; i < k; i++) {
          q_used[i]=0;
     }
      deadtime = k;
-     jump.start();
+     jump.restart();
      console.log("456");
    }
 }
