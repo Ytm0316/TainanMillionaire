@@ -90,7 +90,7 @@ var Jump = function(){
 	Jump.prototype = {
 		init:function(){
 			this.checkUserAgent();
-			this.createHelpers();//create helpers	
+			//this.createHelpers();//create helpers	
 			this.LightSetup();//create lights.
 			this.RendererSetup();
 			this.CameraSetup();
