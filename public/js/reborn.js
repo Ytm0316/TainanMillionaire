@@ -63,13 +63,13 @@ function reborn(){
         console.log(player_ans);
         console.log(ans);
         jump.stop();
-        while(player_ans ==0){
-        }
-        if(player_ans != ans){           //if答案是否正確
-          jump.restart(); 
-          jump.start();
-          return ;
-         }
+        //while(player_ans ==0){
+        //}
+        //if(player_ans != ans){           //if答案是否正確
+         // jump.restart(); 
+          //jump.start();
+          //return ;
+         //}
    
         console.log(player_ans);
  
