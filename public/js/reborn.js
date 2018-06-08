@@ -42,7 +42,7 @@ function reborn(){
       {check();}
     deadtime = deadtime - 1 ;
     q_used[RandNum] = -1;
-    var aus = RandNum % 4 + 1;
+    var ans = RandNum % 4 + 1;
     var content=document.getElementById("content" + (RandNum));
         content.style.display="block";
         select1.style.display="block";
