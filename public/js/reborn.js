@@ -61,7 +61,7 @@ function reborn(){
          return ;
         }
    
-        console.log("player_ans");
+        console.log(player_ans);
  
         content.style.display="none";
         rebor.style.display="none";
