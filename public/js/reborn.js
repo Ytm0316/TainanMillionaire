@@ -2,6 +2,7 @@
  var q_used= new Array(k-1);
  var i;
  var player_ans=0;
+ var selected=0;
  var deadtime = k;  //總共可以死幾次(問題數)
  var rebor=document.getElementById("reborn");
  var select1=document.getElementById("select1");
@@ -9,10 +10,18 @@
  var select3=document.getElementById("select3");
  var select4=document.getElementById("select4");
  
-function Select1(){ player_ans= 1}
-function Select2(){ player_ans= 2}
-function Select3(){ player_ans= 3}
-function Select4(){ player_ans= 4}
+function Select1(){ player_ans= 1;
+                    selected=-1;
+                  }
+function Select2(){ player_ans= 2;
+                    selected=-1;
+                  }
+function Select3(){ player_ans= 3;
+                    selected=-1;
+                  }
+function Select4(){ player_ans= 4;
+                    selected=-1;
+                  }
 
     for (i = 0; i < k; i++) {
         q_used[i]=0;
@@ -54,12 +63,12 @@ function reborn(){
         console.log(player_ans);
         console.log(ans);
         jump.stop();
-   
-        if(player_ans != ans){           //if答案是否正確
-         jump.restart(); 
-         jump.start();
-         player_ans=0;
-         return ;
+        while(player_ans ==0){
+         if(player_ans != ans){           //if答案是否正確
+          jump.restart(); 
+          jump.start();
+          return ;
+         }
         }
    
         console.log(player_ans);
@@ -72,7 +81,7 @@ function reborn(){
         select4.style.display="none";
         jump.start();
          
-   //jump.revive();
+        //jump.revive();
   }else{
          for (i = 0; i < k; i++) {
          q_used[i]=0;
