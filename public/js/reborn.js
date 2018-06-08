@@ -20,7 +20,6 @@ function check(){
 }
 function reborn(){
   if(deadtime > 0){
-   jump.stop();
     rebor.style.display="block";
    
     var question = new Array(k-1); 
