@@ -5,9 +5,9 @@ var Jump = function(){
 		jumper_width:18,
 		jumper_height:46,//該數值影響落點判斷的難度
 		frustumSize:200,
-		hell_ground:-30,
+		hell_ground:-40,
 		ground_thick:10,
-		light_ref: new THREE.Vector3(100,300, 100),
+		light_ref: new THREE.Vector3(100,300,100),
 		//light2_ref: new THREE.Vector3(200, 400, 200),
 		aspect:window.innerWidth / window.innerHeight
 	};
@@ -21,9 +21,19 @@ var Jump = function(){
 	}
 	this.cube_set = {
 		horse:[],
-		cube_color_order:1,
+		cube_color_order:1,//for horse
 		cube:[],
-		floor:[]
+		floor:[],
+		cube_sp:[],
+		color_order:[1,1,1,1,1,1],
+		spc_default:[
+		{ size : 40 , y:-30},
+		{ size : 40 , y:-26},
+		{ size : 60 , y:-30},
+		{ size : 40 , y:-30},
+		{ size : 40 , y:-30},
+		{ size : 40 , y:-15}
+		]
 	};
 	this.light_set ={
 		light	:	new THREE.PointLight( 0xffffff, 1.5, 500),
@@ -80,7 +90,7 @@ var Jump = function(){
 	Jump.prototype = {
 		init:function(){
 			this.checkUserAgent();
-			//this.createHelpers();//create helpers	
+			this.createHelpers();//create helpers	
 			this.LightSetup();//create lights.
 			this.RendererSetup();
 			this.CameraSetup();
@@ -88,8 +98,10 @@ var Jump = function(){
 			this.createfloor();
 			this.createCube();
 			this.createCube();
-			this.horse_create();//create horse			
+			this.horse_create();//create horse
+			this.specialCubeLoad();
 			this.updateCamera();
+			//this.testani();
 
 			var mouseEvents = (this.config.isMobile) ? {//check mobile
 				down :'touchstart',
@@ -105,6 +117,10 @@ var Jump = function(){
 			canvas.addEventListener(mouseEvents.down, 	function(){game.mousedown();});
 			canvas.addEventListener(mouseEvents.up, 	function(){game.mouseup();});
 			window.addEventListener( 'resize', function(){game.onWindowResize();}, false );	
+		},
+		testani:function(){
+			this.renderer.render(this.scene,this.camera);
+			requestAnimationFrame(this.testani.bind(this));
 		},
 		checkUserAgent: function() {//done
 			var n = navigator.userAgent;
@@ -432,12 +448,23 @@ var Jump = function(){
 				});
 			}
 		},
+		getRandomColor:function() {
+			var letters = '0123456789ABCDEF';
+			var color = '#';
+			for (var i = 0; i < 6; i++) {
+				color += letters[Math.floor(Math.random() * 16)];
+			}
+				return color;
+		},
 		createCube:function(){//done
 			var rand = Math.random();
 			var size = rand*20+30;//size from 30 to 50
-			var material = new THREE.MeshStandardMaterial({color: 0x00ff00});
+			var col = this.getRandomColor();
+			var material = new THREE.MeshStandardMaterial({color: col});
 			var geometry = new THREE.BoxBufferGeometry(size,20,size);				
 			var mesh = new THREE.Mesh(geometry,material);
+			//mesh.level = 'normal';
+			mesh.to_y = -10;
 			mesh.castShadow = true;
 			mesh.receiveShadow = true;
 			if(this.cube_set.cube.length){
@@ -457,23 +484,30 @@ var Jump = function(){
 				this.CubeDir.former = this.CubeDir.current;//update direction
 				this.CubeDir.current = dir;
 				///////////////////////////
+				var destiny = Math.random();
+				var special = (destiny>=0.78)&&(this.cube_set.cube_sp.length==6);
+				var magicbox;
+				if(special){
+					magicbox = this.createCubeSpecial();
+					mesh = magicbox.mesh;
+				}
 				if(this.CubeDir.current=='forward'){
 					mesh.position.x = 	mesh.geometry.parameters.width/2 + 
 										this.cube_set.cube[this.cube_set.cube.length-1].geometry.parameters.width/2+
 										this.cube_set.cube[this.cube_set.cube.length-1].position.x+
 										Math.random()*90+45;
-					mesh.position.y =  this.cube_set.cube[this.cube_set.cube.length-1].position.y;
+					mesh.position.y =  (special) ? magicbox.y:-10;
 					mesh.position.z =  this.cube_set.cube[this.cube_set.cube.length-1].position.z;				
 				}else if(this.CubeDir.current=='left'){
 					mesh.position.x =  this.cube_set.cube[this.cube_set.cube.length-1].position.x;
-					mesh.position.y =  this.cube_set.cube[this.cube_set.cube.length-1].position.y;
+					mesh.position.y =  (special) ? magicbox.y:-10;
 					mesh.position.z =  (-mesh.geometry.parameters.width/2)-
 										this.cube_set.cube[this.cube_set.cube.length-1].geometry.parameters.width/2+
 										this.cube_set.cube[this.cube_set.cube.length-1].position.z
 										-Math.random()*90-45;
 				}else{
 					mesh.position.x =  this.cube_set.cube[this.cube_set.cube.length-1].position.x;
-					mesh.position.y =  this.cube_set.cube[this.cube_set.cube.length-1].position.y;
+					mesh.position.y =  (special) ? magicbox.y:-10;
 					mesh.position.z =  (mesh.geometry.parameters.width/2)+
 										this.cube_set.cube[this.cube_set.cube.length-1].position.z+
 										this.cube_set.cube[this.cube_set.cube.length-1].geometry.parameters.width/2+
@@ -509,7 +543,7 @@ var Jump = function(){
 			this.scene.background = new THREE.Color(0x4286f4);
 		},
 		LightSetup:function(){//done only adjust position. no add!
-			this.light_set.light.position = this.config.light_ref;
+			this.light_set.light.position.set(100,300,100); //= this.config.light_ref; not available
 			this.light_set.light.castShadow = true;
 			//this.light_set.light2.position = this.config.light2_ref;
 			//this.light_set.light2.castShadow = true;
@@ -664,7 +698,9 @@ var Jump = function(){
 		cubeRecover:function(){
 			console.log('recover');
 			var target_cube = this.cube_set.cube[this.cube_set.cube.length-2];
-			if(target_cube.position.y<-10){
+			var to_y = target_cube.to_y;
+			var scale = target_cube.scale.x;
+			if(target_cube.position.y<to_y){
 				var game = this;
 				if(!this.jumperStat.jump_pos_reset){
 					this.cube_set.horse.position.y = 0;
@@ -673,10 +709,10 @@ var Jump = function(){
 					target_cube.position.y +=0.35;
 					target_cube.scale.x -=0.008;
 					target_cube.scale.z -=0.008;
-					if(target_cube.position.y>=-10){
-						target_cube.position.y = -10;
-						target_cube.scale.x = 1;
-						target_cube.scale.z = 1;					
+					if(target_cube.position.y>=to_y){
+						target_cube.position.y = to_y;
+						target_cube.scale.x = scale;
+						target_cube.scale.z = scale;					
 					}
 				}
 				requestAnimationFrame(function(){
@@ -697,7 +733,7 @@ var Jump = function(){
 			};
 			//i think no need to update camera...
 			var r = this.cube_set.cube[this.cube_set.cube.length-2].position;
-			this.cube_set.horse.position.set(r.x,r.y+10,r.z);
+			this.cube_set.horse.position.set(r.x,0,r.z);
 			this.cube_set.horse.rotation.x = -Math.PI/2;
 			this.cube_set.horse.rotation.y = 0;
 			this.cube_set.horse.rotation.z = 0;
@@ -707,5 +743,317 @@ var Jump = function(){
 		},
 		gamePropertyAdd:function(to_do){
 			to_do();
+		},
+		quickLoadCube:function(url,callback){//done  //中間件
+			game = this;
+			this.loader.load(
+			url,// resource URL
+				function(object){
+					game.cube_set.cube_color_order=1;
+					callback(object);
+					game.cube_set.cube_sp[game.cube_set.cube_sp.length] = object;
+				},
+				function(xhr){// called when loading is in progresses
+					console.log ((xhr.loaded/xhr.total*100)+'% loaded');
+				},
+				function ( error ) {
+					console.log( 'An error happened' );
+				}
+			);
+		},
+		specialCubeLoad:function(){//20,15,20 for original?
+			var game = this;
+			this.quickLoadCube('obj/001_take_window.obj',
+			function(obj){
+				
+				//obj.position.y = -30;
+				obj.rotating = 1;
+				obj.to_y = game.cube_set.spc_default[0].y;
+				obj.geometry = {
+					parameters:{
+						width:game.cube_set.spc_default[0].size
+					}
+				};
+				obj.scale.set(2,2,2);//test
+				obj.rotation.z = -Math.PI/2;//spin z could get different feelings!
+				obj.rotation.x = -Math.PI/2;	
+				obj.traverse(
+					function(child){
+						if(child instanceof THREE.Mesh){//child.material = new THREE.MeshBasicMaterial( {color: 0xa5e587} );
+							child.castShadow = true; //default is false
+							child.receiveShadow = false; //default
+							if(game.cube_set.color_order[0]==1){
+								child.material = new THREE.MeshStandardMaterial( {color: 0xffffff} );//方塊本體
+								game.cube_set.color_order[0]++;
+							}
+							
+							else if(game.cube_set.color_order[0]==2){
+								child.material = new THREE.MeshStandardMaterial( {color: 0xf39700} );//內部
+								game.cube_set.color_order[0]++;
+									
+							}
+							else{
+								child.material = new THREE.MeshStandardMaterial( {color: 0x8ec31e} );
+								game.cube_set.color_order[0]++;
+							}
+
+						}
+					});
+					//obj.position.set(20,-30,20) ;
+					//game.scene.add(obj);//test
+			});	
+			this.quickLoadCube('obj/002_taichi.obj',
+			function(obj){//20,15,20 for original?
+				//obj.position.set(-75,0,75);
+				//obj.rotation.x = -Math.PI/2;
+				//obj.position.y = 20;
+				obj.rotating = 1;
+				obj.to_y = game.cube_set.spc_default[1].y;
+				obj.geometry = {
+					parameters:{
+						width:game.cube_set.spc_default[1].size
+					}
+				};
+				obj.scale.set(2,2,2);
+				obj.rotation.z = -Math.PI/2;//spin z to -pi or -pi/2
+				obj.rotation.x = -Math.PI/2;	
+				obj.traverse(
+					function(child){
+						if(child instanceof THREE.Mesh){//child.material = new THREE.MeshBasicMaterial( {color: 0xa5e587} );
+							child.castShadow = true; //default is false
+							child.receiveShadow = false; //default
+							if(game.cube_set.color_order[1]==1||game.cube_set.color_order[1]==9||game.cube_set.color_order[1]==10||game.cube_set.color_order[1]==13){//點點
+								child.material = new THREE.MeshStandardMaterial( {color: 0xffffff} );
+								game.cube_set.color_order[1]++;
+							}	
+							else if(game.cube_set.color_order[1]==6){//方塊本體
+								child.material = new THREE.MeshStandardMaterial( {color: 0xffffff} );//
+								game.cube_set.color_order[1]++;		
+							}
+							else if(game.cube_set.color_order[1]==7||game.cube_set.color_order[1]==11){//藍
+								child.material = new THREE.MeshStandardMaterial( {color: 0x036eb8} );//
+								game.cube_set.color_order[1]++;		
+							}
+							else if(game.cube_set.color_order[1]==8||game.cube_set.color_order[1]==12){//gray
+								child.material = new THREE.MeshStandardMaterial( {color: 0x3e3a39} );//
+								game.cube_set.color_order[1]++;		
+							}
+							else{			
+								game.cube_set.color_order[1]++;
+							}
+
+						}
+				});
+					//obj.position.set(20,-26,20)
+					//game.scene.add(obj);//test
+			});	
+			this.quickLoadCube('obj/003_mortise.obj',
+			function(obj){//size not sure
+				//obj.position.set(-75,0,75);
+				//obj.rotation.x = -Math.PI/2;
+				//obj.position.y = -43;
+				obj.rotating = 1;
+				obj.to_y = game.cube_set.spc_default[2].y;
+				obj.geometry = {
+					parameters:{
+						width:game.cube_set.spc_default[2].size
+					}
+				};
+				obj.scale.set(2,2,2);
+				obj.rotation.z = -Math.PI/2;//spin z to -pi or -pi/2
+				obj.rotation.x = -Math.PI/2;	
+				obj.traverse(
+					function(child){
+						if(child instanceof THREE.Mesh){//child.material = new THREE.MeshBasicMaterial( {color: 0xa5e587} );
+							child.castShadow = true; //default is false
+							child.receiveShadow = false; //default
+							if(game.cube_set.color_order[2]==1){//底座
+								child.material = new THREE.MeshStandardMaterial( {color: 0x3e3e3e} );
+								game.cube_set.color_order[2]++;
+							}	
+							
+							else if(game.cube_set.color_order[2]==2){//方塊本體
+								child.material = new THREE.MeshStandardMaterial( {color: 0xf39700} );//
+								game.cube_set.color_order[2]++;		
+							}
+							else if(game.cube_set.color_order[2]==3){//方塊本體
+								child.material = new THREE.MeshStandardMaterial( {color: 0x036eb8} );//
+								game.cube_set.color_order[2]++;		
+							}
+							else if(game.cube_set.color_order[2]==4){//方塊本體
+								child.material = new THREE.MeshStandardMaterial( {color: 0xff0000} );//
+								game.cube_set.color_order[2]++;		
+							}
+							else{			
+								game.cube_set.color_order[2]++;
+							}
+
+						}
+				});	
+					//obj.position.set(30,-30,30);//test
+					//game.scene.add(obj);//test
+			});	
+			this.quickLoadCube('obj/004_momo.obj',
+			function(obj){//20,15,20 for original?
+				//obj.position.set(-75,0,75);
+				//obj.rotation.x = -Math.PI/2;
+				//obj.position.y = -43;
+				obj.rotating = 0;
+				obj.to_y = game.cube_set.spc_default[3].y;
+				obj.geometry = {
+					parameters:{
+						width:game.cube_set.spc_default[3].size
+					}
+				};
+				obj.scale.set(2,2,2);
+				obj.rotation.z = -Math.PI/2;//spin z to 0 or -pi/2
+				obj.rotation.x = -Math.PI/2;	
+				obj.traverse(
+					function(child){
+						if(child instanceof THREE.Mesh){//child.material = new THREE.MeshBasicMaterial( {color: 0xa5e587} );
+							child.castShadow = true; //default is false
+							child.receiveShadow = false; //default
+							if(game.cube_set.color_order[3]==4){//樹枝
+								child.material = new THREE.MeshStandardMaterial( {color: 0xf39700} );//
+								game.cube_set.color_order[3]++;		
+							}
+							
+							else if(game.cube_set.color_order[3]==5||game.cube_set.color_order[3]==17){//數葉
+								child.material = new THREE.MeshStandardMaterial( {color: 0x81c31c} );//
+								game.cube_set.color_order[3]++;		
+							}
+							else if(game.cube_set.color_order[3]==3||game.cube_set.color_order[3]==11){//桃子邊
+								child.material = new THREE.MeshStandardMaterial( {color: 0xea5414} );//
+								game.cube_set.color_order[3]++;		
+							}
+							else if(game.cube_set.color_order[3]==12||game.cube_set.color_order[3]==6){//ye
+								child.material = new THREE.MeshStandardMaterial( {color: 0xffe100} );//
+								game.cube_set.color_order[3]++;		
+							}
+							
+							else if(game.cube_set.color_order[3]==16){//gray
+								child.material = new THREE.MeshStandardMaterial( {color: 0x717071} );//
+								game.cube_set.color_order[3]++;		
+							}
+							else{
+								child.material = new THREE.MeshStandardMaterial( {color: 0xffffff} );
+								game.cube_set.color_order[3]++;
+							}
+
+						}
+				});	
+					//obj.position.set(20,-30,20);//test
+					//game.scene.add(obj);//test
+			});
+			this.quickLoadCube('obj/005_bdoor.obj',
+			function(obj){//20,15,20 for original?
+				//obj.position.set(-75,0,75);
+				//obj.rotation.x = -Math.PI/2;
+				//obj.position.y = -43;
+				//obj.translateZ(10);
+				obj.rotating = 1;
+				obj.to_y = game.cube_set.spc_default[4].y;
+				obj.geometry = {
+					parameters:{
+						width:game.cube_set.spc_default[4].size
+					}
+				};
+				obj.scale.set(2,2,2);
+				obj.rotation.z = -Math.PI/2;//spin z to 0 or -pi/2
+				obj.rotation.x = -Math.PI/2;	
+				obj.traverse(
+					function(child){
+						if(child instanceof THREE.Mesh){//child.material = new THREE.MeshBasicMaterial( {color: 0xa5e587} );
+							child.castShadow = true; //default is false
+							child.receiveShadow = false; //default
+							if(game.cube_set.color_order[4]==1){//樹枝
+								child.material = new THREE.MeshStandardMaterial( {color: 0xea5414} );//
+								game.cube_set.color_order[4]++;		
+							}			
+							else{
+								child.material = new THREE.MeshStandardMaterial( {color: 0xffffff} );
+								game.cube_set.color_order[4]++;
+							}
+
+						}
+				});	
+					//obj.position.set(20,-28,20);//test
+					//game.scene.add(obj);//test
+			});
+			this.quickLoadCube('obj/006_dragonson.obj',
+			function(obj){//20,15,20 for original?
+				//obj.position.set(-75,0,75);
+				//obj.rotation.x = -Math.PI/2;
+				//obj.position.y = -43;
+				obj.rotating = 1;//1 for rotate any angle. 0 for only two angle
+				obj.to_y = game.cube_set.spc_default[5].y;//reads the default
+				obj.geometry = {
+					parameters:{
+						width:game.cube_set.spc_default[5].size
+					}
+				};
+				obj.scale.set(2.5,2.5,2.5);
+				obj.rotation.z = -Math.PI/2;//spin z to 0 or -pi/2
+				obj.rotation.x = -Math.PI/2;	
+				obj.traverse(
+					function(child){
+						if(child instanceof THREE.Mesh){//child.material = new THREE.MeshBasicMaterial( {color: 0xa5e587} );
+							child.castShadow = true; //default is false
+							child.receiveShadow = false; //default
+							if(game.cube_set.color_order[5]==5){//深灰ㄉ
+								child.material = new THREE.MeshStandardMaterial( {color: 0xffffff} );//
+								game.cube_set.color_order[5]++;		
+							}
+							else if(game.cube_set.color_order[5]==4){//green
+								child.material = new THREE.MeshStandardMaterial( {color: 0x8ec31e} );//
+								game.cube_set.color_order[5]++;		
+							}
+							else if(game.cube_set.color_order[5]==12||game.cube_set.color_order[5]==19||game.cube_set.color_order[5]==31||game.cube_set.color_order[5]==36||game.cube_set.color_order[5]==0){//bl
+								child.material = new THREE.MeshStandardMaterial( {color: 0x036eb8} );//
+								game.cube_set.color_order[5]++;		
+							}
+							else{
+								child.material = new THREE.MeshStandardMaterial( {color: 0x3e3a39} );
+								game.cube_set.color_order[5]++;
+							}
+
+						}
+				});	
+					//obj.position.set(20,-15,20);
+					//game.scene.add(obj);//test
+			});
+		},
+		createCubeSpecial:function(){
+			var random = Math.floor(Math.random()*6);
+			var width = this.cube_set.cube_sp[random].size;
+			var y = this.cube_set.cube_sp[random].to_y;
+			var mesh = this.cube_set.cube_sp[random].clone();
+			
+			
+				mesh.geometry = {
+					parameters:{
+						width:this.cube_set.cube_sp[random].geometry.parameters.width
+					}
+				};
+				mesh.to_y = this.cube_set.cube_sp[random].to_y;
+			var alldirection = this.cube_set.cube_sp[random].rotating;
+			var rotated = Math.random();
+			if(alldirection==0){
+				mesh.rotation.z = (rotated>=0.5)? 0:(-Math.PI/2);
+			}else{
+				if(rotated>=0.75){
+					mesh.rotation.z = 0;
+				}else if(rotated>=0.5){
+					mesh.rotation.z = -Math.PI/2;
+				}else if(rotated>=0.25){
+					mesh.rotation.z = -Math.PI/2*2;
+				}else{
+					mesh.rotation.z = -Math.PI/2*3;
+				}
+			}
+
+			return {mesh:mesh,y:y};
+			
 		}
+		
 	};
