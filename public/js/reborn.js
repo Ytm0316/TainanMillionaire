@@ -57,6 +57,7 @@ function reborn(){
    
         if(player_ans != ans){           //if答案是否正確
          jump.restart(); 
+         jump.start();
          player_ans=0;
          return ;
         }
