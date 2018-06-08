@@ -51,14 +51,16 @@ function reborn(){
         select4.style.display="block";// 回傳函數與ans比對
         content.innerHTML = question[RandNum];
         
-        console.log("player_ans");
-        console.log("ans");
+        console.log(player_ans);
+        console.log(ans);
         jump.stop();
+   
         if(player_ans != ans){           //if答案是否正確
          jump.restart(); 
          player_ans=0;
          return ;
         }
+   
         console.log("player_ans");
  
         content.style.display="none";
