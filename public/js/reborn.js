@@ -9,10 +9,10 @@
  var select3=document.getElementById("select3");
  var select4=document.getElementById("select4");
  
-function select1(){ player_ans= 1}
-function select2(){ player_ans= 2}
-function select3(){ player_ans= 3}
-function select4(){ player_ans= 4}
+function Select1(){ player_ans= 1}
+function Select2(){ player_ans= 2}
+function Select3(){ player_ans= 3}
+function Select4(){ player_ans= 4}
 
     for (i = 0; i < k; i++) {
         q_used[i]=0;
