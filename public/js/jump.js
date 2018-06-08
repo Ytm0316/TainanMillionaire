@@ -781,7 +781,7 @@ var Jump = function(){
 					function(child){
 						if(child instanceof THREE.Mesh){//child.material = new THREE.MeshBasicMaterial( {color: 0xa5e587} );
 							child.castShadow = true; //default is false
-							child.receiveShadow = false; //default
+							child.receiveShadow = true; //default
 							if(game.cube_set.color_order[0]==1){
 								child.material = new THREE.MeshStandardMaterial( {color: 0xffffff} );//方塊本體
 								game.cube_set.color_order[0]++;
@@ -821,7 +821,7 @@ var Jump = function(){
 					function(child){
 						if(child instanceof THREE.Mesh){//child.material = new THREE.MeshBasicMaterial( {color: 0xa5e587} );
 							child.castShadow = true; //default is false
-							child.receiveShadow = false; //default
+							child.receiveShadow = true; //default
 							if(game.cube_set.color_order[1]==1||game.cube_set.color_order[1]==9||game.cube_set.color_order[1]==10||game.cube_set.color_order[1]==13){//點點
 								child.material = new THREE.MeshStandardMaterial( {color: 0xffffff} );
 								game.cube_set.color_order[1]++;
@@ -866,7 +866,7 @@ var Jump = function(){
 					function(child){
 						if(child instanceof THREE.Mesh){//child.material = new THREE.MeshBasicMaterial( {color: 0xa5e587} );
 							child.castShadow = true; //default is false
-							child.receiveShadow = false; //default
+							child.receiveShadow = true; //default
 							if(game.cube_set.color_order[2]==1){//底座
 								child.material = new THREE.MeshStandardMaterial( {color: 0x3e3e3e} );
 								game.cube_set.color_order[2]++;
@@ -912,7 +912,7 @@ var Jump = function(){
 					function(child){
 						if(child instanceof THREE.Mesh){//child.material = new THREE.MeshBasicMaterial( {color: 0xa5e587} );
 							child.castShadow = true; //default is false
-							child.receiveShadow = false; //default
+							child.receiveShadow = true; //default
 							if(game.cube_set.color_order[3]==4){//樹枝
 								child.material = new THREE.MeshStandardMaterial( {color: 0xf39700} );//
 								game.cube_set.color_order[3]++;		
@@ -965,7 +965,7 @@ var Jump = function(){
 					function(child){
 						if(child instanceof THREE.Mesh){//child.material = new THREE.MeshBasicMaterial( {color: 0xa5e587} );
 							child.castShadow = true; //default is false
-							child.receiveShadow = false; //default
+							child.receiveShadow = true; //default
 							if(game.cube_set.color_order[4]==1){//樹枝
 								child.material = new THREE.MeshStandardMaterial( {color: 0xea5414} );//
 								game.cube_set.color_order[4]++;		
@@ -999,7 +999,7 @@ var Jump = function(){
 					function(child){
 						if(child instanceof THREE.Mesh){//child.material = new THREE.MeshBasicMaterial( {color: 0xa5e587} );
 							child.castShadow = true; //default is false
-							child.receiveShadow = false; //default
+							child.receiveShadow = true; //default
 							if(game.cube_set.color_order[5]==5){//深灰ㄉ
 								child.material = new THREE.MeshStandardMaterial( {color: 0xffffff} );//
 								game.cube_set.color_order[5]++;		
