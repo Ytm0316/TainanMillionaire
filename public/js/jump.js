@@ -38,7 +38,7 @@ var Jump = function(){
 	this.light_set ={
 		light	:	new THREE.PointLight( 0xffffff, 1.5, 500),
 		//light2	:	new THREE.PointLight( 0xffffff, 1, 500),
-		ambient : 	new THREE.AmbientLight(0xfffd87)
+		ambient : 	new THREE.AmbientLight(0xfffd87,1.1)
 	};
 	this.helpers = {
 		light_helper	: new THREE.CameraHelper( this.light_set.light.shadow.camera ),
@@ -58,7 +58,7 @@ var Jump = function(){
 	};
 	this.CubeDir = {
 		former:'forward',
-		current:''
+		current:'forward'
 	};
 	this.land_info ={
 		result:0,
@@ -101,11 +101,11 @@ var Jump = function(){
 			this.CameraSetup();
 			this.SceneSetup();
 			this.createfloor();
-			this.createCube();
-			this.createCube();
+			//this.createCube();     combination with quickload...horse_create
+			//this.createCube();     combination with quickload...horse_create
 			this.horse_create();//create horse
 			this.specialCubeLoad();
-			this.updateCamera();
+			//this.updateCamera();   combination with quickload...horse_create
 			//this.testani();
 	
 			var canvas = document.querySelector('canvas');
@@ -295,31 +295,6 @@ var Jump = function(){
 				}
 			}
 		},
-		mousedown:function(){//game config need to be editted.
-			var game = this;
-			var cube_cur = game.cube_set.cube[game.cube_set.cube.length-2];
-			if(!game.jumperStat.ready&&game.cube_set.horse.scale.z>0.5&&game.play){
-				game.cube_set.horse.scale.z -= 0.01;
-				game.jumperStat.h_speed += 0.035;
-				game.jumperStat.y_speed += 0.04;
-				
-				game.cube_set.horse.position.y -=0.1;//squeeze effect.
-				cube_cur.position.y -=0.1;
-				cube_cur.scale.x +=0.002;
-				cube_cur.scale.z +=0.002;
-				game.cubeStat.recovered = false;
-				game.jumperStat.jump_pos_reset = false;
-				
-				game.falling.x_speed_nodir = game.jumperStat.h_speed;//fail.no direction.type copy the speed.
-				
-				
-				console.log('down');
-				game.renderer.render(game.scene,game.camera);
-				requestAnimationFrame(function(){
-					game.mousedown();
-				});
-			}
-		},
 		checkcube:function(){//done    //forward only check x direction. left and right only check z direction. 
 							//better check both direction in all condition
 			if(this.cube_set.cube.length>1){
@@ -345,10 +320,12 @@ var Jump = function(){
 				}
 				var cubewidth_current= this.cube_set.cube[this.cube_set.cube.length-2].geometry.parameters.width;
 				var cubewidth_next=	this.cube_set.cube[this.cube_set.cube.length-1].geometry.parameters.width;
-				var offset = (this.CubeDir.current=='forward')? (this.config.jumper_length):(this.config.jumper_width);
+				var offset = this.config.jumper_length;
+				//(this.CubeDir.current=='forward')? (this.config.jumper_length):(this.config.jumper_width);
 				var selfArea = cubewidth_current/2 + offset/2 ;
 				var nextArea = cubewidth_next/2 + offset/2 ;
 				var result = 0;
+				//// main direction check
 				if(distanceC < selfArea){
 					this.land_info.distance = distanceC;
 					result = (distanceC < cubewidth_current/2)? 1:2;
@@ -358,10 +335,37 @@ var Jump = function(){
 				}else{
 					result = 0;
 				}
+				///// main direction check end
 				this.land_info.result = result;
 				
 			}
 		},
+		mousedown:function(){//game config need to be editted.
+			var game = this;
+			var cube_cur = game.cube_set.cube[game.cube_set.cube.length-2];
+			if(!game.jumperStat.ready&&game.cube_set.horse.scale.z>0.5&&game.play){
+				game.cube_set.horse.scale.z -= 0.01;
+				game.jumperStat.h_speed += 0.035;
+				game.jumperStat.y_speed += 0.04;
+				
+				game.cube_set.horse.position.y -=0.1;//squeeze effect.
+				cube_cur.position.y -=0.1;
+				cube_cur.scale.x +=0.002;
+				cube_cur.scale.z +=0.002;
+				game.cubeStat.recovered = false;
+				game.jumperStat.jump_pos_reset = false;
+				
+				game.falling.x_speed_nodir = game.jumperStat.h_speed;//fail.no direction.type copy the speed.
+				
+				
+				console.log('down');
+				game.renderer.render(game.scene,game.camera);
+				requestAnimationFrame(function(){
+					game.mousedown();
+				});
+			}
+		},
+		
 		mouseup:function(){//working... with fail fall
 			var game = this;
 			var canvas = document.querySelector('canvas');
@@ -417,6 +421,99 @@ var Jump = function(){
 				}
 			}
 		}
+		},
+		updateHorseDir:function(){
+			var horse = this.cube_set.horse;
+			var pos = this.jumperStat.position;
+			var to_z ;
+			var to_x ; 
+			var rotateDone = false;
+			if(this.CubeDir.former==this.CubeDir.current){
+				//no need to change direction
+			}else{
+				if(this.CubeDir.former=='left'){
+					horse.rotation.z -= 0.1;
+					////
+					to_z = pos.z + this.config.jumper_length/2;
+					to_x = pos.x + this.config.jumper_length/2;
+					if(horse.position.z<to_z){
+						horse.position.z += this.config.jumper_length/14;
+						horse.position.x += this.config.jumper_length/14;
+					}else{
+						horse.position.z = to_z;
+						horse.position.x = to_x;
+					}
+					////
+					if(Math.abs(horse.rotation.z)<=0.1){
+						horse.rotation.z = 0;
+						rotateDone = true;
+					}
+				}else if(this.CubeDir.former=='right'){
+					horse.rotation.z += 0.1;
+					////
+					to_z = pos.z - this.config.jumper_length/2;
+					to_x = pos.x + this.config.jumper_length/2;
+					if(horse.position.z>to_z){
+						horse.position.z -= this.config.jumper_length/14;
+						horse.position.x += this.config.jumper_length/14;
+					}else{
+						horse.position.z = to_z;
+						horse.position.x = to_x;
+					}
+					////
+					if(Math.abs(horse.rotation.z)<=0.1){
+						horse.rotation.z = 0;
+						rotateDone = true;
+					}
+				}else{
+					if(this.CubeDir.current=='left'){
+						horse.rotation.z += 0.1;
+						////
+						to_z = pos.z - this.config.jumper_length/2;
+						to_x = pos.x - this.config.jumper_length/2;
+						if(horse.position.z>to_z){
+							horse.position.z -= this.config.jumper_length/14;
+							horse.position.x -= this.config.jumper_length/14;
+						}else{
+							horse.position.z = to_z;
+							horse.position.x = to_x;
+							
+						}
+						////
+						if(Math.abs(horse.rotation.z-Math.PI/2)<=0.1){
+							horse.rotation.z = Math.PI/2;
+							rotateDone = true;
+						}	
+					}else{
+						horse.rotation.z -= 0.1;
+						////
+						to_z = pos.z + this.config.jumper_length/2;
+						to_x = pos.x - this.config.jumper_length/2;
+						if(horse.position.z<to_z){
+							horse.position.z += this.config.jumper_length/14;
+							horse.position.x -= this.config.jumper_length/14;
+						}else{
+							horse.position.z = to_z;
+							horse.position.x = to_x;
+						}
+						////
+						if(Math.abs(horse.rotation.z+Math.PI/2)<=0.1){
+							horse.rotation.z = -Math.PI/2;
+							rotateDone = true;
+						}
+					}
+					
+				}
+				if(!rotateDone){
+					var game = this;
+					this.renderer.render(this.scene,this.camera);
+					requestAnimationFrame(function(){
+						game.updateHorseDir();
+					});
+				}else{
+					this.renderer.render(this.scene,this.camera);
+				}
+			}
 		},
 		updateCameraPos:function(){//done
 			var lastIndex = this.cube_set.cube.length - 1;
@@ -507,6 +604,11 @@ var Jump = function(){
 				}
 				this.CubeDir.former = this.CubeDir.current;//update direction
 				this.CubeDir.current = dir;
+				this.jumperStat.position.x = this.cube_set.horse.position.x;
+				this.jumperStat.position.y = this.cube_set.horse.position.y;
+				this.jumperStat.position.z = this.cube_set.horse.position.z;
+				this.updateHorseDir();
+				
 				///////////////////////////
 				var destiny = Math.random();
 				var special = (destiny>=0.1)&&(this.cube_set.cube_sp.length==6);
@@ -607,14 +709,20 @@ var Jump = function(){
 					callback(object);
 					if(horse_or_cube==0){
 						game.cube_set.horse = object;
-						game.jumperStat.position = object.position;
+						game.jumperStat.position.x = object.position.x;
+						game.jumperStat.position.y = object.position.y;
+						game.jumperStat.position.z = object.position.z;
 						game.scene.add(game.cube_set.horse);
 					}
 					else{
 						game.cube_set.cube[num] = object;
 						game.scene.add(game.cube_set.cube[num]);
 					}
+					game.createCube();
+					game.createCube();
+					game.updateCamera();
 					game.start();
+					game.renderer.render(game.scene,game.camera);
 				},
 				function(xhr){// called when loading is in progresses
 					console.log ((xhr.loaded/xhr.total*100)+'% loaded');
@@ -638,8 +746,9 @@ var Jump = function(){
 				var game = this;
 				this.quickLoad('obj/horse.obj',0,0,
 				function(obj){
-					obj.position.set(-75,0,75);
+					obj.position.set(-75+game.config.jumper_length/2,0,75);
 					obj.rotation.x = -Math.PI/2;
+					//obj.rotation.z = -Math.PI/2;
 					obj.traverse(
 						function(child){
 							if(child instanceof THREE.Mesh){//child.material = new THREE.MeshBasicMaterial( {color: 0xa5e587} );
@@ -768,7 +877,8 @@ var Jump = function(){
 			this.cube_set.horse.position.set(r.x,0,r.z);
 			this.cube_set.horse.rotation.x = -Math.PI/2;
 			this.cube_set.horse.rotation.y = 0;
-			this.cube_set.horse.rotation.z = 0;
+			this.cube_set.horse.rotation.z = (this.CubeDir.current=='left')? Math.PI/2 : (
+											 (this.CubeDir.current=='forward')? 0:-Math.PI/2);
 			this.renderer.render(this.scene,this.camera);
 			
 			
