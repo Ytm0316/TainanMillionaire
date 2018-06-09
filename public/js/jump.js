@@ -79,6 +79,10 @@ var Jump = function(){
 		stage:0,
 		cube:0
 	};
+	this.mouseEvents = {
+		down:'',
+		up:''
+	};
 	this.scene = new THREE.Scene();
 	this.renderer = new THREE.WebGLRenderer();
 	this.loader = new THREE.OBJLoader();
@@ -102,31 +106,36 @@ var Jump = function(){
 			this.specialCubeLoad();
 			this.updateCamera();
 			//this.testani();
-
-			var mouseEvents = (this.config.isMobile) ? {//check mobile
-				down :'touchstart',
-				up :'touchend'				
-			} :
-			{
-				down:'mousedown',
-				up:'mouseup'
-			};
-			
+	
 			var canvas = document.querySelector('canvas');
 			var game = this;
-			canvas.addEventListener(mouseEvents.down, 	function(){game.mousedown();});
-			canvas.addEventListener(mouseEvents.up, 	function(){game.mouseup();});
+			game.downevent = function(){game.mousedown();};//add two property...
+			game.upevent = function(){game.mouseup();};//
+			canvas.addEventListener(game.mouseEvents.down, 	game.downevent);
+			canvas.addEventListener(game.mouseEvents.up, 	game.upevent);
 			window.addEventListener( 'resize', function(){game.onWindowResize();}, false );	
 		},
 		testani:function(){
 			this.renderer.render(this.scene,this.camera);
 			requestAnimationFrame(this.testani.bind(this));
 		},
-		checkUserAgent: function() {//done
+		checkUserAgent: function() {//done  with mouse event 
 			var n = navigator.userAgent;
 			if (n.match(/Android/i) || n.match(/webOS/i) || n.match(/iPhone/i) || n.match(/iPad/i) || n.match(/iPod/i) || n.match(/BlackBerry/i)) {
 				this.config.isMobile = true
 			}
+			if(this.config.isMobile){
+				this.mouseEvents = {
+					down:'touchstart',
+					up:'touchend'
+				};
+			}else{
+				this.mouseEvents = {
+					down:'mousedown',
+					up:'mouseup'
+				};
+			}
+			
 		},
 		fail_fall:function(){//done falling rotate using.  //better for x,z direction in both every condition
 			var game = this;
@@ -237,7 +246,7 @@ var Jump = function(){
 					var cube = game.cube_set.cube;
 					var horse = game.cube_set.horse;
 					var dir_c = game.CubeDir.current;
-					var offset = (dir_c=='forward')? game.config.jumper_length : game.config.jumper_width;
+					var offset = (dir_c=='forward')? game.config.jumper_length/2 : game.config.jumper_width/2;
 					var cube_width = cube[cube.length-1].geometry.parameters.width;
 					var horse_pos = horse.position;
 					var cube_pos = cube[cube.length-1].position;
@@ -275,6 +284,11 @@ var Jump = function(){
 					game.fail_fall();
 				});
 			}else{
+				//
+				var canvas = document.querySelector('canvas');
+				canvas.addEventListener(game.mouseEvents.down, 	game.downevent);
+				canvas.addEventListener(game.mouseEvents.up, 	game.upevent);
+				//
 				if(game.failedCallback){
 					game.failedCallback();
 				}
@@ -349,6 +363,9 @@ var Jump = function(){
 		},
 		mouseup:function(){//working... with fail fall
 			var game = this;
+			var canvas = document.querySelector('canvas');
+			canvas.removeEventListener(game.mouseEvents.down, 	game.downevent);
+			canvas.removeEventListener(game.mouseEvents.up, 	game.upevent);
 		if(game.play){
 			if(!game.cubeStat.recovered){
 				game.cubeRecover();
@@ -378,7 +395,11 @@ var Jump = function(){
 				game.jumperStat.y_speed = 0;
 				game.cube_set.horse.position.y = 0;
 				game.checkcube();
+				var canvas = document.querySelector('canvas');
+			
 				if(game.land_info.result == 3){
+					canvas.addEventListener(game.mouseEvents.down, 	game.downevent);
+					canvas.addEventListener(game.mouseEvents.up, 	game.upevent);
 					game.createCube();
 					game.updateCamera();
 					game.stage_info.cube++;
@@ -386,8 +407,10 @@ var Jump = function(){
 						game.successCallback();
 					}
 					
-				}else if(game.land_info.resutl == 1){
+				}else if(game.land_info.result == 1){
 					//nothing. on current cube.no create cube
+					canvas.addEventListener(game.mouseEvents.down, 	game.downevent);
+					canvas.addEventListener(game.mouseEvents.up, 	game.upevent);
 				}else{
 					game.fail_fall();
 				}
@@ -485,11 +508,18 @@ var Jump = function(){
 				this.CubeDir.current = dir;
 				///////////////////////////
 				var destiny = Math.random();
-				var special = (destiny>=0.78)&&(this.cube_set.cube_sp.length==6);
+				var special = (destiny>=0.1)&&(this.cube_set.cube_sp.length==6);
 				var magicbox;
 				if(special){
 					magicbox = this.createCubeSpecial();
 					mesh = magicbox.mesh;
+					var rsize = 0.75+Math.random()/4;
+					mesh.scale.x = mesh.scale.x*rsize;
+					mesh.scale.y = mesh.scale.y*rsize;
+					mesh.scale.z = mesh.scale.z*rsize;
+					mesh.geometry.parameters.width = mesh.geometry.parameters.width*rsize;
+					mesh.to_y = mesh.to_y*rsize;// i think no need to create magicbox.y...
+					magicbox.y = magicbox.y*rsize;
 				}
 				if(this.CubeDir.current=='forward'){
 					mesh.position.x = 	mesh.geometry.parameters.width/2 + 
