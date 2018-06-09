@@ -93,6 +93,7 @@ var Jump = function(){
 };
 	Jump.prototype = {
 		init:function(){
+			this.stop();//before load the horse.
 			this.checkUserAgent();
 			//this.createHelpers();//create helpers	
 			this.LightSetup();//create lights.
@@ -613,6 +614,7 @@ var Jump = function(){
 						game.cube_set.cube[num] = object;
 						game.scene.add(game.cube_set.cube[num]);
 					}
+					game.start();
 				},
 				function(xhr){// called when loading is in progresses
 					console.log ((xhr.loaded/xhr.total*100)+'% loaded');
