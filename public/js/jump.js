@@ -20,6 +20,7 @@ var Jump = function(){
 		collide_type_confirm:false
 	}
 	this.cube_set = {
+		cheater:[],
 		horse:[],
 		cube_color_order:1,//for horse
 		cube:[],
@@ -62,7 +63,8 @@ var Jump = function(){
 	};
 	this.land_info ={
 		result:0,
-		distance:0//the distance when you landed on next cube.
+		distance:0,//the distance when you landed on next cube.
+		type:0 //0 for absolute failure. 1 for error increasing.
 	//result : 	0 落在空白區
 	//			1 落在原本區域 成功
 	//			2 落在原本區域 失敗
@@ -101,6 +103,7 @@ var Jump = function(){
 			this.CameraSetup();
 			this.SceneSetup();
 			this.createfloor();
+			this.createCheater();
 			//this.createCube();     combination with quickload...horse_create
 			//this.createCube();     combination with quickload...horse_create
 			this.horse_create();//create horse
@@ -141,34 +144,54 @@ var Jump = function(){
 		fail_fall:function(){//done falling rotate using.  //better for x,z direction in both every condition
 			var game = this;
 			var horse = {
-				x:game.cube_set.horse.position.x-game.config.jumper_length/2,
-				z:game.cube_set.horse.position.z
+				x:(this.CubeDir.current=='foward') ? game.cube_set.horse.position.x-game.config.jumper_length/2 : game.cube_set.horse.position.x,
+				z:(this.CubeDir.current=='foward') ? game.cube_set.horse.position.z : (
+				  (this.CubeDir.current=='left')   ? game.cube_set.horse.position.z + game.config.jumper_length/2 : 
+											 game.cube_set.horse.position.z - game.config.jumper_length/2
+				)
 			};			
 			var cube_next=	this.cube_set.cube[this.cube_set.cube.length-1];
 			if(game.land_info.result == 0){
 				game.falling_rotate('no');
 			}else if(game.land_info.result == 2){
 				if(game.CubeDir.current == 'forward'){
-					game.falling_rotate('forward2');
+					game.falling_rotate('up');
 				}else if(game.CubeDir.current == 'left'){
-					game.falling_rotate('left2');
+					game.falling_rotate('left');
 				}else{
-					game.falling_rotate('right2');
+					game.falling_rotate('right');
 				}
 			}else if(game.land_info.result==4){
-				if(game.CubeDir.current == 'forward'){
-					if(horse.x > cube_next.position.x){
-						game.falling_rotate('forward2');
+				if(game.land_info.type==1){
+					if(game.CubeDir.current == 'forward'){
+						if(horse.z > cube_next.position.z){
+							game.falling_rotate('right');
+						}else{
+							game.falling_rotate('left');
+						}
 					}else{
-						game.falling_rotate('forwardrev');
+						if(horse.x > cube_next.position.x){
+							game.falling_rotate('up');
+						}else{
+							game.falling_rotate('down');
+						}
 					}
-				}else{
-					if(horse.z > cube_next.position.z){
-						game.falling_rotate('right2');
+				}else{//type 0
+					if(game.CubeDir.current == 'forward'){
+						if(horse.x > cube_next.position.x){
+							game.falling_rotate('up');
+						}else{
+							game.falling_rotate('down');
+						}
 					}else{
-						game.falling_rotate('left2');
+						if(horse.z > cube_next.position.z){
+							game.falling_rotate('right');
+						}else{
+							game.falling_rotate('left');
+						}
 					}
 				}
+				
 			}
 		},
 		falling_rotate:function(dir){//done with fail fall
@@ -180,25 +203,25 @@ var Jump = function(){
 			var rotate ;//rotating speed
 			var rotateTo;//to specific angle
 			var fallingTo = game.config.hell_ground + game.config.jumper_width/2 + game.config.ground_thick/2;//toground.
-			if(dir=='forward2'){
+			if(dir=='up'){
 				rotateAxis = 'y';
 				rotate = game.cube_set.horse.rotation[rotateAxis] + 0.1;
 				rotateTo = game.cube_set.horse.rotation[rotateAxis] < Math.PI/2;
 				game.cube_set.horse.translateX = offset;//move horse out of the cube area
-			}else if(dir=='forwardrev'){
+			}else if(dir=='down'){
 				rotateAxis = 'y';
 				rotate = game.cube_set.horse.rotation[rotateAxis] - 0.1;
 				rotateTo = game.cube_set.horse.rotation[rotateAxis] > -Math.PI/2;
 				game.cube_set.horse.translateX = -offset;//move horse out of the cube area
-			}else if(dir=='right2'){
-				rotateAxis = 'x';
-				rotate = game.cube_set.horse.rotation[rotateAxis] + 0.1;
-				rotateTo = game.cube_set.horse.rotation[rotateAxis] < 0;
-				game.cube_set.horse.translateZ = offset;//move horse out of the cube area
-			}else if(dir=='left2'){
+			}else if(dir=='left'){
 				rotateAxis = 'x';
 				rotate = game.cube_set.horse.rotation[rotateAxis] - 0.1;
 				rotateTo = game.cube_set.horse.rotation[rotateAxis] > -Math.PI;
+				game.cube_set.horse.translateZ = offset;//move horse out of the cube area
+			}else if(dir=='right'){
+				rotateAxis = 'x';
+				rotate = game.cube_set.horse.rotation[rotateAxis] + 0.1;
+				rotateTo = game.cube_set.horse.rotation[rotateAxis] < 0;
 				game.cube_set.horse.translateZ = -offset;//move horse out of the cube area
 			}else if(dir=='no'){//no sink a lot
 				rotateTo = false;
@@ -247,7 +270,8 @@ var Jump = function(){
 					var cube = game.cube_set.cube;
 					var horse = game.cube_set.horse;
 					var dir_c = game.CubeDir.current;
-					var offset = (dir_c=='forward')? game.config.jumper_length/2 : game.config.jumper_width/2;
+					var offset = game.config.jumper_length/2;
+					//(dir_c=='forward')? game.config.jumper_length/2 : game.config.jumper_width/2;
 					var cube_width = cube[cube.length-1].geometry.parameters.width;
 					var horse_pos = horse.position;
 					var cube_pos = cube[cube.length-1].position;
@@ -299,8 +323,10 @@ var Jump = function(){
 							//better check both direction in all condition
 			if(this.cube_set.cube.length>1){
 				var pointH = {//horse position. note that the reference point get translated
-					x: this.cube_set.horse.position.x-this.config.jumper_length/2,
-					z: this.cube_set.horse.position.z
+					x: (this.CubeDir.current=='forward')?this.cube_set.horse.position.x-this.config.jumper_length/2:this.cube_set.horse.position.x,
+					z: (this.CubeDir.current=='forward')?this.cube_set.horse.position.z:(
+						(this.CubeDir.current=='left')? this.cube_set.horse.position.z+this.config.jumper_length/2:this.cube_set.horse.position.z-this.config.jumper_length/2
+					)
 				};
 				var pointC = {
 					x: this.cube_set.cube[this.cube_set.cube.length - 2].position.x,
@@ -328,26 +354,81 @@ var Jump = function(){
 				//// main direction check
 				if(distanceC < selfArea){
 					this.land_info.distance = distanceC;
+					this.land_info.type = 0;
 					result = (distanceC < cubewidth_current/2)? 1:2;
 				}else if(distanceN < nextArea){
 					this.land_info.distance = distanceN;
+					this.land_info.type = 0;
 					result = (distanceN < cubewidth_next/2)? 3:4;
 				}else{
+					this.land_info.type = 0;
 					result = 0;
+				}
+				if(result==3){
+
+					if(!(this.CubeDir.current=='forward')){
+						distanceN = Math.abs(pointN.x - pointH.x);
+					}else{
+						distanceN = Math.abs(pointN.z - pointH.z);
+					}
+						offset = this.config.jumper_width;
+						nextArea = cubewidth_next/2 + offset/2 ;
+					if(distanceN < nextArea){
+						this.land_info.distance = distanceN;
+						result = (distanceN < cubewidth_next/2)? 3:4;
+						if(result==4){
+							this.land_info.type = 1;
+						}
+					}else{
+						this.land_info.type = 0;
+						result = 0;
+					}
+				
 				}
 				///// main direction check end
 				this.land_info.result = result;
 				
 			}
 		},
+		createCheater:function(){
+			var geometry = new THREE.CircleGeometry( 5, 32 );
+			var material = new THREE.MeshStandardMaterial( { color: 0xffff00 } );
+			var circle = new THREE.Mesh( geometry, material );
+			circle.position.set(-75,0.1,75);
+			circle.rotation.x = -Math.PI/2;
+			this.cube_set.cheater = circle;
+			//this.scene.add(this.cube_set.cheater);
+		},
+		cheat:function(h_speed,v_speed,pos_x,pos_z){
+			var distance=0,x=0,z=0,y=0;
+			while(y>=0){
+				distance += h_speed;
+				y += v_speed;
+				v_speed -= 0.04;
+			}
+			if(this.CubeDir.current=='forward'){
+				x = pos_x + distance;
+				z = pos_z;
+			}else if(this.CubeDir.current=='left'){
+				x = pos_x;
+				z = pos_z - distance;
+			}else{
+				x = pos_x;
+				z = pos_z + distance;
+			}
+			this.cube_set.cheater.position.set(x,0.1,z);
+			if(this.cube_set.cheater.parent==null){
+				this.scene.add(this.cube_set.cheater);
+			}
+		},
 		mousedown:function(){//game config need to be editted.
-			var game = this;
+			var game = this;		
 			var cube_cur = game.cube_set.cube[game.cube_set.cube.length-2];
 			if(!game.jumperStat.ready&&game.cube_set.horse.scale.z>0.5&&game.play){
 				game.cube_set.horse.scale.z -= 0.01;
 				game.jumperStat.h_speed += 0.035;
 				game.jumperStat.y_speed += 0.04;
-				
+				game.cheat(game.jumperStat.h_speed , game.jumperStat.y_speed , game.cube_set.horse.position.x , game.cube_set.horse.position.z);
 				game.cube_set.horse.position.y -=0.1;//squeeze effect.
 				cube_cur.position.y -=0.1;
 				cube_cur.scale.x +=0.002;
@@ -368,6 +449,7 @@ var Jump = function(){
 		
 		mouseup:function(){//working... with fail fall
 			var game = this;
+			
 			var canvas = document.querySelector('canvas');
 			canvas.removeEventListener(game.mouseEvents.down, 	game.downevent);
 			canvas.removeEventListener(game.mouseEvents.up, 	game.upevent);
@@ -395,6 +477,7 @@ var Jump = function(){
 					game.mouseup();
 				});
 			}else{
+				game.scene.remove(game.cube_set.cheater);
 				game.jumperStat.ready = false;
 				game.jumperStat.h_speed = 0;
 				game.jumperStat.y_speed = 0;
@@ -748,7 +831,8 @@ var Jump = function(){
 				function(obj){
 					obj.position.set(-75+game.config.jumper_length/2,0,75);
 					obj.rotation.x = -Math.PI/2;
-					//obj.rotation.z = -Math.PI/2;
+					//obj.rotation.z = Math.PI/2;
+					//obj.rotation.y += Math.PI/2;
 					obj.traverse(
 						function(child){
 							if(child instanceof THREE.Mesh){//child.material = new THREE.MeshBasicMaterial( {color: 0xa5e587} );
