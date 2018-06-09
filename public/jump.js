@@ -20,6 +20,7 @@ var Jump = function(){
 		collide_type_confirm:false
 	}
 	this.cube_set = {
+		cheater:[],
 		horse:[],
 		cube_color_order:1,//for horse
 		cube:[],
@@ -102,6 +103,7 @@ var Jump = function(){
 			this.CameraSetup();
 			this.SceneSetup();
 			this.createfloor();
+			this.createCheater();
 			//this.createCube();     combination with quickload...horse_create
 			//this.createCube();     combination with quickload...horse_create
 			this.horse_create();//create horse
@@ -388,14 +390,45 @@ var Jump = function(){
 				
 			}
 		},
+		createCheater:function(){
+			var geometry = new THREE.CircleGeometry( 5, 32 );
+			var material = new THREE.MeshStandardMaterial( { color: 0xffff00 } );
+			var circle = new THREE.Mesh( geometry, material );
+			circle.position.set(-75,0.1,75);
+			circle.rotation.x = -Math.PI/2;
+			this.cube_set.cheater = circle;
+			//this.scene.add(this.cube_set.cheater);
+		},
+		cheat:function(h_speed,v_speed,pos_x,pos_z){
+			var distance=0,x=0,z=0,y=0;
+			while(y>=0){
+				distance += h_speed;
+				y += v_speed;
+				v_speed -= 0.04;
+			}
+			if(this.CubeDir.current=='forward'){
+				x = pos_x + distance;
+				z = pos_z;
+			}else if(this.CubeDir.current=='left'){
+				x = pos_x;
+				z = pos_z - distance;
+			}else{
+				x = pos_x;
+				z = pos_z + distance;
+			}
+			this.cube_set.cheater.position.set(x,0.1,z);
+			if(this.cube_set.cheater.parent==null){
+				this.scene.add(this.cube_set.cheater);
+			}
+		},
 		mousedown:function(){//game config need to be editted.
-			var game = this;
+			var game = this;		
 			var cube_cur = game.cube_set.cube[game.cube_set.cube.length-2];
 			if(!game.jumperStat.ready&&game.cube_set.horse.scale.z>0.5&&game.play){
 				game.cube_set.horse.scale.z -= 0.01;
 				game.jumperStat.h_speed += 0.035;
 				game.jumperStat.y_speed += 0.04;
-				
+				game.cheat(game.jumperStat.h_speed , game.jumperStat.y_speed , game.cube_set.horse.position.x , game.cube_set.horse.position.z);
 				game.cube_set.horse.position.y -=0.1;//squeeze effect.
 				cube_cur.position.y -=0.1;
 				cube_cur.scale.x +=0.002;
@@ -416,6 +449,7 @@ var Jump = function(){
 		
 		mouseup:function(){//working... with fail fall
 			var game = this;
+			
 			var canvas = document.querySelector('canvas');
 			canvas.removeEventListener(game.mouseEvents.down, 	game.downevent);
 			canvas.removeEventListener(game.mouseEvents.up, 	game.upevent);
@@ -443,6 +477,7 @@ var Jump = function(){
 					game.mouseup();
 				});
 			}else{
+				game.scene.remove(game.cube_set.cheater);
 				game.jumperStat.ready = false;
 				game.jumperStat.h_speed = 0;
 				game.jumperStat.y_speed = 0;
