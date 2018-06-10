@@ -1060,7 +1060,7 @@ var Jump = function(){
 			function(obj){
 				
 				//obj.position.y = -30;
-				obj.add(new THREE.PointLight(0xb2cfff,0.2,100));
+				//obj.add(new THREE.PointLight(0xb2cfff,0.2,100));
 				obj.rotating = 1;
 				obj.to_y = game.cube_set.spc_default[0].y;
 				obj.geometry = {
@@ -1245,7 +1245,7 @@ var Jump = function(){
 				//obj.rotation.x = -Math.PI/2;
 				//obj.position.y = -43;
 				//obj.translateZ(10);
-				obj.add(new THREE.PointLight(0xb2cfff,0.2,100));
+				//obj.add(new THREE.PointLight(0xb2cfff,0.2,100));
 				obj.rotating = 1;
 				obj.to_y = game.cube_set.spc_default[4].y;
 				obj.geometry = {
