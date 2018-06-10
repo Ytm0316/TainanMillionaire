@@ -89,6 +89,13 @@ var Jump = function(){
 		down:'',
 		up:''
 	};
+	this.audioStat = {
+		listener:null,
+		game_bgm:null,
+		horse:null,
+		horse_ready:false,
+		horse_load:false
+	};
 	this.scene = new THREE.Scene();
 	this.renderer = new THREE.WebGLRenderer();
 	this.loader = new THREE.OBJLoader();
@@ -104,7 +111,7 @@ var Jump = function(){
 			var game = this;
 			game.downevent = function(){game.mousedown();};//add two property...
 			game.upevent = function(){game.mouseup();};
-			
+			this.audioSetup();
 			this.stop();//before load the horse.
 			this.checkUserAgent();
 			//this.createHelpers();//create helpers	
@@ -129,6 +136,31 @@ var Jump = function(){
 			canvas.addEventListener(game.mouseEvents.up, 	game.upevent);
 			*/
 			window.addEventListener( 'resize', function(){game.onWindowResize();}, false );	
+			
+		},
+		audioSetup:function(){
+			var game = this;
+			game.audioStat.listener = new THREE.AudioListener();
+			var listener = game.audioStat.listener;
+			this.camera.add( listener );
+			
+			game.audioStat.game_bgm = new THREE.Audio( listener );
+			game.audioStat.horse = new THREE.Audio( listener );
+			
+			var audioLoader = new THREE.AudioLoader();
+			audioLoader.load('mp3/game_bgm1.mp3',function( buffer ){
+				game.audioStat.game_bgm.setBuffer( buffer );
+				game.audioStat.game_bgm.setLoop(true);
+				game.audioStat.game_bgm.setVolume(0.5);
+				game.audioStat.game_bgm.play();
+			});
+			audioLoader.load('mp3/jump_effect.mp3',function( buffer ){
+				game.audioStat.horse.setBuffer( buffer );
+				game.audioStat.horse.setLoop(false);
+				game.audioStat.horse.setVolume(0.5);
+				game.audioStat.horse_load = true;
+				//game.audioStat.game_bgm.play();
+			});
 			
 		},
 		testani:function(){
@@ -450,7 +482,9 @@ var Jump = function(){
 				
 				game.falling.x_speed_nodir = game.jumperStat.h_speed;//fail.no direction.type copy the speed.
 				
-				
+				if(game.audioStat.horse_load){
+					game.audioStat.horse_ready = true;
+				}
 				console.log('down');
 				game.renderer.render(game.scene,game.camera);
 				requestAnimationFrame(function(){
@@ -463,6 +497,10 @@ var Jump = function(){
 			var game = this;
 			
 		if(game.play){
+			if(game.audioStat.horse_ready){
+				game.audioStat.horse.play();
+				game.audioStat.horse_ready = false;
+			}
 			var canvas = document.querySelector('canvas');
 			canvas.removeEventListener(game.mouseEvents.down, 	game.downevent);
 			canvas.removeEventListener(game.mouseEvents.up, 	game.upevent);
