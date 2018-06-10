@@ -745,7 +745,7 @@ var Jump = function(){
 				
 				///////////////////////////
 				var destiny = Math.random();
-				var special = (destiny>=0.1)&&(this.cube_set.cube_sp.length==6);
+				var special = (destiny>=0.66)&&(this.cube_set.cube_sp.length==6);
 				var magicbox;
 				if(special){
 					magicbox = this.createCubeSpecial();
