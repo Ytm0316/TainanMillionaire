@@ -8,8 +8,8 @@ var Jump = function(){
 		hell_ground:-40,
 		ground_thick:10,
 		light_ref: new THREE.Vector3( 0, 300, 0),
-		light2_ref: new THREE.Vector3( -75, -40, 75),
-		light3_ref: new THREE.Vector3( 0, -40, 0),
+		//light2_ref: new THREE.Vector3( -75, -40, 75),
+		//light3_ref: new THREE.Vector3( 0, -40, 0),
 		//light4_ref: new THREE.Vector3(-75,-40,75),
 		aspect:window.innerWidth / window.innerHeight
 	};
@@ -40,8 +40,8 @@ var Jump = function(){
 	};
 	this.light_set ={
 		light	:	new THREE.PointLight( 0xf4f4f4, 1.5, 500),
-		light2	:	new THREE.PointLight( 0xffffff, 0.2, 300),//next
-		light3  :	new THREE.PointLight( 0xffffff, 0.2, 300),//current
+		//light2	:	new THREE.PointLight( 0xffffff, 0.2, 300),//next
+		//light3  :	new THREE.PointLight( 0xffffff, 0.2, 300),//current
 		//light4  :	new THREE.PointLight( 0xffffff, 0.1, 500),
 		ambient : 	new THREE.AmbientLight(0xfffec9,0.95)
 	};
@@ -93,8 +93,8 @@ var Jump = function(){
 	this.renderer = new THREE.WebGLRenderer();
 	this.loader = new THREE.OBJLoader();
 	this.camera = new THREE.OrthographicCamera( this.config.frustumSize * this.config.aspect / - 1, this.config.frustumSize * this.config.aspect / 1, this.config.frustumSize / 1, this.config.frustumSize / - 1, 1, 2000 );			
-	this.scene.add( this.light_set.light2);
-	this.scene.add( this.light_set.light3);
+	//this.scene.add( this.light_set.light2);
+	//this.scene.add( this.light_set.light3);
 	//this.scene.add( this.light_set.light4);
 	this.scene.add( this.light_set.ambient);
 	this.scene.add( this.light_set.light );	
@@ -672,6 +672,7 @@ var Jump = function(){
 				game.camera.position.set(c.x-200,200,c.z+200);
 				game.camera.lookAt(c.x,0,c.z);
 				var light1 = this.config.light_ref;
+				/*
 				var cube_c = this.cube_set.cube[this.cube_set.cube.length-2];
 				var cube_n = this.cube_set.cube[this.cube_set.cube.length-1];
 				var radius_c = cube_c.geometry.parameters.width * Math.sqrt(2) + 1 ;
@@ -687,10 +688,10 @@ var Jump = function(){
 					z: Math.cos(-Math.PI/4) * radius_n,
 					y: Math.cos(-Math.PI/3) * radius_n
 				};
-				
+				*/
 				game.light_set.light.position.set(c.x + light1.x , light1.y , c.z + light1.z);
-				game.light_set.light2.position.set(cube_c.position.x + c_offset.x , cube_c.position.y + c_offset.y , cube_c.position.z + c_offset.z);
-				game.light_set.light3.position.set(cube_n.position.x + n_offset.x , cube_n.position.y + n_offset.y , cube_n.position.z + n_offset.z);
+				//game.light_set.light2.position.set(cube_c.position.x + c_offset.x , cube_c.position.y + c_offset.y , cube_c.position.z + c_offset.z);
+				//game.light_set.light3.position.set(cube_n.position.x + n_offset.x , cube_n.position.y + n_offset.y , cube_n.position.z + n_offset.z);
 				//var light4 = this.config.light4_ref;
 				//var light4 = this.cube_set.cube[this.cube_set.cube.length-1].position;				
 				//game.light_set.light4.position.set(light4.x + this.config.light4_ref.x , this.config.light4_ref.y , light4.z + this.config.light4_ref.z);
