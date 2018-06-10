@@ -7,7 +7,7 @@ var Jump = function(){
 		frustumSize:200,
 		hell_ground:-40,
 		ground_thick:10,
-		light_ref: new THREE.Vector3( 0, 300, 0),
+		light_ref: new THREE.Vector3( -50, 250, 50),
 		//light2_ref: new THREE.Vector3( -75, -40, 75),
 		//light3_ref: new THREE.Vector3( 0, -40, 0),
 		//light4_ref: new THREE.Vector3(-75,-40,75),
@@ -39,7 +39,7 @@ var Jump = function(){
 		]
 	};
 	this.light_set ={
-		light	:	new THREE.PointLight( 0xf4f4f4, 1.5, 500),
+		light	:	new THREE.PointLight( 0xf4f4f4, 1.35, 500),
 		//light2	:	new THREE.PointLight( 0xffffff, 0.2, 300),//next
 		//light3  :	new THREE.PointLight( 0xffffff, 0.2, 300),//current
 		//light4  :	new THREE.PointLight( 0xffffff, 0.1, 500),
