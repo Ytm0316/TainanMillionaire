@@ -92,9 +92,10 @@ var Jump = function(){
 	this.audioStat = {
 		listener:null,
 		game_bgm:null,
-		horse:null,
+		horse:[],
 		horse_ready:false,
-		horse_load:false
+		horse_dis:false
+		
 	};
 	this.scene = new THREE.Scene();
 	this.renderer = new THREE.WebGLRenderer();
@@ -145,7 +146,9 @@ var Jump = function(){
 			this.camera.add( listener );
 			
 			game.audioStat.game_bgm = new THREE.Audio( listener );
-			game.audioStat.horse = new THREE.Audio( listener );
+			var horse = new THREE.Audio( listener );
+			var horse2 = new THREE.Audio( listener );
+			var horse3 = new THREE.Audio( listener );
 			
 			var audioLoader = new THREE.AudioLoader();
 			audioLoader.load('mp3/game_bgm1.mp3',function( buffer ){
@@ -155,13 +158,36 @@ var Jump = function(){
 				game.audioStat.game_bgm.play();
 			});
 			audioLoader.load('mp3/jump_effect.mp3',function( buffer ){
-				game.audioStat.horse.setBuffer( buffer );
-				game.audioStat.horse.setLoop(false);
-				game.audioStat.horse.setVolume(0.5);
-				game.audioStat.horse_load = true;
+				horse.setBuffer( buffer );
+				horse.setLoop(false);
+				horse.setVolume(0.5);
+				game.audioStat.horse.push(horse);
+				//game.audioStat.horse_load = true;
+				//game.audioStat.game_bgm.play();
+			});
+			audioLoader.load('mp3/jump_effect2.mp3',function( buffer ){
+				horse2.setBuffer( buffer );
+				horse2.setLoop(false);
+				horse2.setVolume(0.5);
+				game.audioStat.horse.push(horse2);
+				//game.audioStat.horse_load = true;
+				//game.audioStat.game_bgm.play();
+			});
+			audioLoader.load('mp3/jump_effect3.mp3',function( buffer ){
+				horse3.setBuffer( buffer );
+				horse3.setLoop(false);
+				horse3.setVolume(0.5);
+				game.audioStat.horse.push(horse3);
+				//game.audioStat.horse_load = true;
 				//game.audioStat.game_bgm.play();
 			});
 			
+		},
+		jumpEffectDisable:function(){
+			this.audioStat.horse_dis = true;
+		},
+		jumpEffectEnable:function(){
+			this.audioStat.horse_dis = false;
 		},
 		testani:function(){
 			this.renderer.render(this.scene,this.camera);
@@ -242,7 +268,7 @@ var Jump = function(){
 			var game = this;
 			var size_horse = (game.land_info.type==0)? game.config.jumper_length:game.config.jumper_width;
 			var cube_width = game.cube_set.cube[game.cube_set.cube.length-1].geometry.parameters.width;
-			var offset = size_horse/2  + cube_width/2 - game.land_info.distance;
+			var offset = Math.abs(size_horse/2  + cube_width/2 - game.land_info.distance);
 			var rotateAxis ;
 			var rotate ;//rotating speed
 			var rotateTo;//to specific angle
@@ -251,22 +277,60 @@ var Jump = function(){
 				rotateAxis = 'y';
 				rotate = game.cube_set.horse.rotation[rotateAxis] + 0.1;
 				rotateTo = game.cube_set.horse.rotation[rotateAxis] < Math.PI/2;
-				if(rotateTo)game.cube_set.horse.translateX(offset/(Math.PI/0.35)); //= offset;//move horse out of the cube area
+				if(rotateTo){
+					if(game.land_info.type==0){
+						game.cube_set.horse.translateX(offset/(Math.PI/0.35));
+					}else{
+						var offset_a = (game.CubeDir.current=='left') ? -offset /( Math.PI / 0.35) : offset /( Math.PI / 0.35 );
+						game.cube_set.horse.translateY(offset_a);
+						
+					}
+				} //= offset;//move horse out of the cube area
 			}else if(dir=='down'){
 				rotateAxis = 'y';
 				rotate = game.cube_set.horse.rotation[rotateAxis] - 0.1;
 				rotateTo = game.cube_set.horse.rotation[rotateAxis] > -Math.PI/2;
-				if(rotateTo)game.cube_set.horse.translateX(-offset/(Math.PI/0.35)); //= -offset;//move horse out of the cube area
+				if(rotateTo){
+					if(game.land_info.type==0){
+						game.cube_set.horse.translateX(-offset/(Math.PI/0.35));
+					}else{
+						var offset_a = (game.CubeDir.current=='left') ? offset /( Math.PI / 0.35) : -offset /( Math.PI / 0.35 );
+						game.cube_set.horse.translateY(offset_a);
+						
+					}
+				} //= -offset;//move horse out of the cube area
 			}else if(dir=='left'){
 				rotateAxis = 'x';
 				rotate = game.cube_set.horse.rotation[rotateAxis] - 0.1;
 				rotateTo = game.cube_set.horse.rotation[rotateAxis] > -Math.PI;
-				if(rotateTo)game.cube_set.horse.translateZ(offset/(Math.PI/0.35)); //= -offset;//move horse out of the cube area
+				if(rotateTo){
+					if(game.land_info.type==0){
+						
+						var offset_a = (game.CubeDir.current=='left') ? offset /( Math.PI / 0.35) : -offset /( Math.PI / 0.35 );
+						game.cube_set.horse.translateX(offset_a);
+						
+					}else{
+						
+						game.cube_set.horse.translateY(offset/(Math.PI/0.35));
+						
+					}
+				} //= -offset;//move horse out of the cube area
 			}else if(dir=='right'){
 				rotateAxis = 'x';
 				rotate = game.cube_set.horse.rotation[rotateAxis] + 0.1;
 				rotateTo = game.cube_set.horse.rotation[rotateAxis] < 0;
-				if(rotateTo)game.cube_set.horse.translateZ(-offset/(Math.PI/0.35)); //= offset;//move horse out of the cube area
+				if(rotateTo){
+					if(game.land_info.type==0){
+						
+						var offset_a = (game.CubeDir.current=='right') ? offset /( Math.PI / 0.35) : -offset /( Math.PI / 0.35 );
+						game.cube_set.horse.translateX(offset_a);
+						
+					}else{
+						
+						game.cube_set.horse.translateY(-offset/(Math.PI/0.35));
+						
+					}
+				} //= offset;//move horse out of the cube area
 			}else if(dir=='no'){//no sink a lot
 				rotateTo = false;
 				fallingTo = game.config.hell_ground + game.config.ground_thick/2;
@@ -482,7 +546,7 @@ var Jump = function(){
 				
 				game.falling.x_speed_nodir = game.jumperStat.h_speed;//fail.no direction.type copy the speed.
 				
-				if(game.audioStat.horse_load){
+				if(game.audioStat.horse.length>0&&!game.audioStat.horse_dis){
 					game.audioStat.horse_ready = true;
 				}
 				console.log('down');
@@ -498,7 +562,7 @@ var Jump = function(){
 			
 		if(game.play){
 			if(game.audioStat.horse_ready){
-				game.audioStat.horse.play();
+				game.audioStat.horse[Math.floor((Math.random()*game.audioStat.horse.length))].play();
 				game.audioStat.horse_ready = false;
 			}
 			var canvas = document.querySelector('canvas');
@@ -934,6 +998,8 @@ var Jump = function(){
 				function(obj){
 					obj.position.set(-75+game.config.jumper_length/2,0,75);
 					obj.rotation.x = -Math.PI/2;
+					//obj.rotation.z = Math.PI/2;
+					//obj.translateX(25);
 					//obj.rotation.z = Math.PI/2;
 					//obj.rotation.y += Math.PI/2;
 					obj.traverse(
