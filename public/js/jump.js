@@ -229,12 +229,12 @@ var Jump = function(){
 				rotateAxis = 'x';
 				rotate = game.cube_set.horse.rotation[rotateAxis] - 0.1;
 				rotateTo = game.cube_set.horse.rotation[rotateAxis] > -Math.PI;
-				if(rotateTo)game.cube_set.horse.translateZ(-offset/(Math.PI/0.35)); //= -offset;//move horse out of the cube area
+				if(rotateTo)game.cube_set.horse.translateX(offset/(Math.PI/0.35)); //= -offset;//move horse out of the cube area
 			}else if(dir=='right'){
 				rotateAxis = 'x';
 				rotate = game.cube_set.horse.rotation[rotateAxis] + 0.1;
 				rotateTo = game.cube_set.horse.rotation[rotateAxis] < 0;
-				if(rotateTo)game.cube_set.horse.translateZ(offset/(Math.PI/0.35)); //= offset;//move horse out of the cube area
+				if(rotateTo)game.cube_set.horse.translateX(-offset/(Math.PI/0.35)); //= offset;//move horse out of the cube area
 			}else if(dir=='no'){//no sink a lot
 				rotateTo = false;
 				fallingTo = game.config.hell_ground + game.config.ground_thick/2;
