@@ -101,6 +101,10 @@ var Jump = function(){
 };
 	Jump.prototype = {
 		init:function(){
+			var game = this;
+			game.downevent = function(){game.mousedown();};//add two property...
+			game.upevent = function(){game.mouseup();};
+			
 			this.stop();//before load the horse.
 			this.checkUserAgent();
 			//this.createHelpers();//create helpers	
@@ -117,13 +121,15 @@ var Jump = function(){
 			//this.updateCamera();   combination with quickload...horse_create
 			//this.testani();
 	
+			
+			//
+			/*
 			var canvas = document.querySelector('canvas');
-			var game = this;
-			game.downevent = function(){game.mousedown();};//add two property...
-			game.upevent = function(){game.mouseup();};//
 			canvas.addEventListener(game.mouseEvents.down, 	game.downevent);
 			canvas.addEventListener(game.mouseEvents.up, 	game.upevent);
+			*/
 			window.addEventListener( 'resize', function(){game.onWindowResize();}, false );	
+			
 		},
 		testani:function(){
 			this.renderer.render(this.scene,this.camera);
@@ -456,10 +462,10 @@ var Jump = function(){
 		mouseup:function(){//working... with fail fall
 			var game = this;
 			
+		if(game.play){
 			var canvas = document.querySelector('canvas');
 			canvas.removeEventListener(game.mouseEvents.down, 	game.downevent);
 			canvas.removeEventListener(game.mouseEvents.up, 	game.upevent);
-		if(game.play){
 			if(!game.cubeStat.recovered){
 				game.cubeRecover();
 			}
@@ -858,6 +864,10 @@ var Jump = function(){
 					game.createCube();
 					game.createCube();
 					game.updateCamera();
+					var canvas = document.querySelector('canvas');
+					canvas.addEventListener(game.mouseEvents.down, 	game.downevent);
+					canvas.addEventListener(game.mouseEvents.up, 	game.upevent);
+					//window.addEventListener( 'resize', function(){game.onWindowResize();}, false );	
 					game.start();
 					//game.roundLight();
 					game.renderer.render(game.scene,game.camera);
