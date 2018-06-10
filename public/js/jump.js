@@ -7,8 +7,10 @@ var Jump = function(){
 		frustumSize:200,
 		hell_ground:-40,
 		ground_thick:10,
-		light_ref: new THREE.Vector3(100,300,100),
-		//light2_ref: new THREE.Vector3(200, 400, 200),
+		light_ref: new THREE.Vector3( 0, 300, 0),
+		light2_ref: new THREE.Vector3( -75, -40, 75),
+		light3_ref: new THREE.Vector3( 0, -40, 0),
+		//light4_ref: new THREE.Vector3(-75,-40,75),
 		aspect:window.innerWidth / window.innerHeight
 	};
 	this.falling = {
@@ -37,9 +39,11 @@ var Jump = function(){
 		]
 	};
 	this.light_set ={
-		light	:	new THREE.PointLight( 0xffffff, 1.5, 500),
-		//light2	:	new THREE.PointLight( 0xffffff, 1, 500),
-		ambient : 	new THREE.AmbientLight(0xfffd87,1.1)
+		light	:	new THREE.PointLight( 0xf4f4f4, 1.5, 500),
+		light2	:	new THREE.PointLight( 0xffffff, 0.2, 300),//next
+		light3  :	new THREE.PointLight( 0xffffff, 0.2, 300),//current
+		//light4  :	new THREE.PointLight( 0xffffff, 0.1, 500),
+		ambient : 	new THREE.AmbientLight(0xfffec9,0.95)
 	};
 	this.helpers = {
 		light_helper	: new THREE.CameraHelper( this.light_set.light.shadow.camera ),
@@ -89,7 +93,9 @@ var Jump = function(){
 	this.renderer = new THREE.WebGLRenderer();
 	this.loader = new THREE.OBJLoader();
 	this.camera = new THREE.OrthographicCamera( this.config.frustumSize * this.config.aspect / - 1, this.config.frustumSize * this.config.aspect / 1, this.config.frustumSize / 1, this.config.frustumSize / - 1, 1, 2000 );			
-	//this.scene.add( this.light_set.light2);			
+	this.scene.add( this.light_set.light2);
+	this.scene.add( this.light_set.light3);
+	//this.scene.add( this.light_set.light4);
 	this.scene.add( this.light_set.ambient);
 	this.scene.add( this.light_set.light );	
 };
@@ -196,7 +202,7 @@ var Jump = function(){
 		},
 		falling_rotate:function(dir){//done with fail fall
 			var game = this;
-			var size_horse = (game.land_info.result=='forward')? game.config.jumper_length:game.config.jumper_width;
+			var size_horse = (game.land_info.type==0)? game.config.jumper_length:game.config.jumper_width;
 			var cube_width = game.cube_set.cube[game.cube_set.cube.length-1].geometry.parameters.width;
 			var offset = size_horse/2  + cube_width/2 - game.land_info.distance;
 			var rotateAxis ;
@@ -207,22 +213,22 @@ var Jump = function(){
 				rotateAxis = 'y';
 				rotate = game.cube_set.horse.rotation[rotateAxis] + 0.1;
 				rotateTo = game.cube_set.horse.rotation[rotateAxis] < Math.PI/2;
-				game.cube_set.horse.translateX = offset;//move horse out of the cube area
+				if(rotateTo)game.cube_set.horse.translateX(offset/(Math.PI/0.35)); //= offset;//move horse out of the cube area
 			}else if(dir=='down'){
 				rotateAxis = 'y';
 				rotate = game.cube_set.horse.rotation[rotateAxis] - 0.1;
 				rotateTo = game.cube_set.horse.rotation[rotateAxis] > -Math.PI/2;
-				game.cube_set.horse.translateX = -offset;//move horse out of the cube area
+				if(rotateTo)game.cube_set.horse.translateX(-offset/(Math.PI/0.35)); //= -offset;//move horse out of the cube area
 			}else if(dir=='left'){
 				rotateAxis = 'x';
 				rotate = game.cube_set.horse.rotation[rotateAxis] - 0.1;
 				rotateTo = game.cube_set.horse.rotation[rotateAxis] > -Math.PI;
-				game.cube_set.horse.translateZ = offset;//move horse out of the cube area
+				if(rotateTo)game.cube_set.horse.translateZ(-offset/(Math.PI/0.35)); //= -offset;//move horse out of the cube area
 			}else if(dir=='right'){
 				rotateAxis = 'x';
 				rotate = game.cube_set.horse.rotation[rotateAxis] + 0.1;
 				rotateTo = game.cube_set.horse.rotation[rotateAxis] < 0;
-				game.cube_set.horse.translateZ = -offset;//move horse out of the cube area
+				if(rotateTo)game.cube_set.horse.translateZ(offset/(Math.PI/0.35)); //= offset;//move horse out of the cube area
 			}else if(dir=='no'){//no sink a lot
 				rotateTo = false;
 				fallingTo = game.config.hell_ground + game.config.ground_thick/2;
@@ -614,6 +620,30 @@ var Jump = function(){
 			pointR.z = (pointA.z+pointB.z)/2;
 			this.cameraPos.next = pointR;
 		},
+		roundLight:function(){
+			if(this.cube_set.cube.length>1){
+				var game = this;
+				var cube_c = this.cube_set.cube[this.cube_set.cube.length-2];
+				var cube_n = this.cube_set.cube[this.cube_set.cube.length-1];
+				var radius_c = cube_c.geometry.parameters.width * Math.sqrt(2) + 1 ;
+				var radius_n = cube_n.geometry.parameters.width * Math.sqrt(2) + 1 ;
+				var time = Date.now() * 0.001;
+				var c_offset = {
+					x: Math.sin(time) * radius_c,
+					z: Math.cos(time) * radius_c
+				};
+				var n_offset = {
+					x: Math.sin(time) * radius_n,
+					z: Math.cos(time) * radius_n
+				};
+				game.light_set.light2.position.set(cube_c.position.x + c_offset.x , this.config.light2_ref.y , cube_c.position.z + c_offset.z);
+				game.light_set.light3.position.set(cube_n.position.x + n_offset.x , this.config.light3_ref.y , cube_n.position.z + n_offset.z);
+				game.renderer.render(game.scene,game.camera);
+				requestAnimationFrame(function(){
+					game.roundLight();
+				});
+			}
+		},
 		updateCamera:function(){//done... floor change too light change too
 			var game = this;
 			var c = {
@@ -642,14 +672,35 @@ var Jump = function(){
 				game.camera.position.set(c.x-200,200,c.z+200);
 				game.camera.lookAt(c.x,0,c.z);
 				var light1 = this.config.light_ref;
-				//var light2 = this.config.light2_ref;
+				var cube_c = this.cube_set.cube[this.cube_set.cube.length-2];
+				var cube_n = this.cube_set.cube[this.cube_set.cube.length-1];
+				var radius_c = cube_c.geometry.parameters.width * Math.sqrt(2) + 1 ;
+				var radius_n = cube_n.geometry.parameters.width * Math.sqrt(2) + 1 ;
+				//var time = Date.now() * 0.001;
+				var c_offset = {
+					x: Math.sin(-Math.PI/4) * radius_c,
+					z: Math.cos(-Math.PI/4) * radius_c,
+					y: Math.cos(-Math.PI/3) * radius_c
+				};
+				var n_offset = {
+					x: Math.sin(-Math.PI/4) * radius_n,
+					z: Math.cos(-Math.PI/4) * radius_n,
+					y: Math.cos(-Math.PI/3) * radius_n
+				};
+				
 				game.light_set.light.position.set(c.x + light1.x , light1.y , c.z + light1.z);
-				//game.light_set.light2.position.set(c.x + light2.x , light2.y , c.z + light2.z);
+				game.light_set.light2.position.set(cube_c.position.x + c_offset.x , cube_c.position.y + c_offset.y , cube_c.position.z + c_offset.z);
+				game.light_set.light3.position.set(cube_n.position.x + n_offset.x , cube_n.position.y + n_offset.y , cube_n.position.z + n_offset.z);
+				//var light4 = this.config.light4_ref;
+				//var light4 = this.cube_set.cube[this.cube_set.cube.length-1].position;				
+				//game.light_set.light4.position.set(light4.x + this.config.light4_ref.x , this.config.light4_ref.y , light4.z + this.config.light4_ref.z);
 				game.renderer.render(game.scene,game.camera);
 				game.floor.position.set(c.x,this.config.hell_ground,c.z);
 				requestAnimationFrame(function() {
 					game.updateCamera();
 				});
+			}else{
+				game.updateHorseDir();
 			}
 		},
 		getRandomColor:function() {
@@ -690,7 +741,7 @@ var Jump = function(){
 				this.jumperStat.position.x = this.cube_set.horse.position.x;
 				this.jumperStat.position.y = this.cube_set.horse.position.y;
 				this.jumperStat.position.z = this.cube_set.horse.position.z;
-				this.updateHorseDir();
+				//this.updateHorseDir();
 				
 				///////////////////////////
 				var destiny = Math.random();
@@ -759,9 +810,11 @@ var Jump = function(){
 			this.scene.background = new THREE.Color(0x4286f4);
 		},
 		LightSetup:function(){//done only adjust position. no add!
-			this.light_set.light.position.set(100,300,100); //= this.config.light_ref; not available
+			this.light_set.light.position.set(0,300,0); //= this.config.light_ref; not available
 			this.light_set.light.castShadow = true;
-			//this.light_set.light2.position = this.config.light2_ref;
+			//this.light_set.light2.position.set(0,-40,0);
+			//this.light_set.light3.position.set(0,-40,0);
+			//this.light_set.light4.position.set(0,-40,0);
 			//this.light_set.light2.castShadow = true;
 			//-----------------------------------------------
 			
@@ -805,6 +858,7 @@ var Jump = function(){
 					game.createCube();
 					game.updateCamera();
 					game.start();
+					//game.roundLight();
 					game.renderer.render(game.scene,game.camera);
 				},
 				function(xhr){// called when loading is in progresses
@@ -940,9 +994,11 @@ var Jump = function(){
 						target_cube.scale.z = scale;					
 					}
 				}
+				/*
 				requestAnimationFrame(function(){
 					game.cubeRecover();
 				});
+				*/
 			}else{
 				this.cubeStat.recovered = true;
 			}
@@ -993,6 +1049,7 @@ var Jump = function(){
 			function(obj){
 				
 				//obj.position.y = -30;
+				obj.add(new THREE.PointLight(0xb2cfff,0.2,100));
 				obj.rotating = 1;
 				obj.to_y = game.cube_set.spc_default[0].y;
 				obj.geometry = {
@@ -1177,6 +1234,7 @@ var Jump = function(){
 				//obj.rotation.x = -Math.PI/2;
 				//obj.position.y = -43;
 				//obj.translateZ(10);
+				obj.add(new THREE.PointLight(0xb2cfff,0.2,100));
 				obj.rotating = 1;
 				obj.to_y = game.cube_set.spc_default[4].y;
 				obj.geometry = {
