@@ -12,7 +12,7 @@
 
 function check(){
   var t= 20;                 //限制時間
-  window.setTimeout(function(){
+  window.setTimeout(check(){
     console.log('function A');  //check()內容
     if(player_ans != ans){    
        jump.restart(); 
