@@ -9,19 +9,25 @@
  var select2=document.getElementById("select2");
  var select3=document.getElementById("select3");
  var select4=document.getElementById("select4");
+
+function check(){
+  var t= 20;                 //限制時間
+  window.setTimeout(function(){
+    console.log('function A');  //check()內容
+    if(player_ans != ans){    
+       jump.restart(); 
+       jump.start();
+       return ; 
+    }
+    
+  }, t * 1000);
+};
+
  
-function Select1(){ var player_ans= 1;
-                    return player_ans;
-                  }
-function Select2(){ var player_ans= 2;
-                    return player_ans;
-                  }
-function Select3(){ var player_ans= 3;
-                    return player_ans;
-                  }
-function Select4(){ var player_ans= 4;
-                    return player_ans;
-                  }
+function Select1(){ var player_ans= 1;}
+function Select2(){ var player_ans= 2;}
+function Select3(){ var player_ans= 3;}
+function Select4(){ var player_ans= 4;}
 
 
     for (i = 0; i < k; i++) {
@@ -64,18 +70,9 @@ function reborn(){
         console.log(player_ans);
         console.log(ans);
         jump.stop();
-        while(player_ans ==0){
-          select1.style.display="block";
-          select2.style.display="block";
-          select3.style.display="block";
-          select4.style.display="block";
-        //if(player_ans != ans){           //if答案是否正確
-         // jump.restart(); 
-          //jump.start();
-          //return ;
-        }
-        
+        check();  
         console.log(player_ans);
+        console.log('player');
  
         content.style.display="none";
         rebor.style.display="none";
