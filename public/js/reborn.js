@@ -14,7 +14,8 @@ var check = function(x){
   var t = 10;
  
   window.setTimeout(function(x){
-    console.log('function A');
+    console.log('x、player');
+    console.log(x);
     console.log(player_ans);
      if(player_ans != x){    
        jump.restart(); 
@@ -69,13 +70,11 @@ function reborn(){
         select3.style.display="block";
         select4.style.display="block";// 回傳函數與ans比對
         content.innerHTML = question[RandNum];
-        
+        console.log('player、x');
         console.log(player_ans);
         console.log(ans);
         jump.stop();
         check(ans);  
-        console.log(player_ans);
-        console.log('player');
  
 /*      content.style.display="none";
         rebor.style.display="none";
