@@ -76,8 +76,8 @@ function reborn(){
         jump.stop();
         check(ans);  
  
-/*      content.style.display="none";
-        rebor.style.display="none";
+        content.style.display="none";
+/*         rebor.style.display="none";
         select1.style.display="none";
         select2.style.display="none";
         select3.style.display="none";
