@@ -10,7 +10,7 @@
  var select3=document.getElementById("select3");
  var select4=document.getElementById("select4");
 
-var check = function(x,content){
+var check = function(x){
   var t = 10;
  
   window.setTimeout(function(){
@@ -22,7 +22,7 @@ var check = function(x,content){
      }else{
        jump.revive();
      }
-        content.style.display="none";
+//      content.style.display="none";
         rebor.style.display="none";
         select1.style.display="none";
         select2.style.display="none";
