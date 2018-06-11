@@ -10,7 +10,7 @@
  var select3=document.getElementById("select3");
  var select4=document.getElementById("select4");
 
-var check() = function(){
+var check = function(){
   var t = 10;
 
   window.setTimeout(function(){
