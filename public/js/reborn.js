@@ -1,6 +1,7 @@
  var k=5  ; //問題數
  var q_used= new Array(k-1);
  var i;
+ var player_ans=0;
  var selected=0;
  var deadtime = k;  //總共可以死幾次(問題數)
  var rebor=document.getElementById("reborn");
