@@ -31,10 +31,10 @@ var check = function(x){
   }, t * 1000);
 };
  
-function Select1(){ var player_ans= 1;}
-function Select2(){ var player_ans= 2;}
-function Select3(){ var player_ans= 3;}
-function Select4(){ var player_ans= 4;}
+function Select1(){  player_ans= 1;}
+function Select2(){  player_ans= 2;}
+function Select3(){  player_ans= 3;}
+function Select4(){  player_ans= 4;}
 
 
     for (i = 0; i < k; i++) {
