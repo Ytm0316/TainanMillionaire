@@ -13,7 +13,7 @@
 var check = function(x){
   var t = 10;
  
-  window.setTimeout(function(x){
+  window.setTimeout(function(){
     console.log('x、player');
     console.log(x);
     console.log(player_ans);
