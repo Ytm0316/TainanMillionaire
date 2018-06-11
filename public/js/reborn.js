@@ -10,19 +10,18 @@
  var select3=document.getElementById("select3");
  var select4=document.getElementById("select4");
 
-function check(){
-  var t= 20;                 //限制時間
-  window.setTimeout(check(){
-    console.log('function A');  //check()內容
-    if(player_ans != ans){    
+var check() = function(){
+  var t = 10;
+
+  window.setTimeout(function(){
+    console.log('function A');
+     if(player_ans != ans){    
        jump.restart(); 
        jump.start();
        return ; 
     }
-    
   }, t * 1000);
 };
-
  
 function Select1(){ var player_ans= 1;}
 function Select2(){ var player_ans= 2;}
