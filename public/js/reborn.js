@@ -65,7 +65,10 @@ function reborn(){
         jump.stop();
         var player_ans=
         while(player_ans ==0){
-          
+          select1.style.display="block";
+          select2.style.display="block";
+          select3.style.display="block";
+          select4.style.display="block";
         //if(player_ans != ans){           //if答案是否正確
          // jump.restart(); 
           //jump.start();
