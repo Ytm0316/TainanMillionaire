@@ -10,12 +10,13 @@
  var select3=document.getElementById("select3");
  var select4=document.getElementById("select4");
 
-var check = function(){
+var check = function(x){
   var t = 10;
-
-  window.setTimeout(function(){
+ 
+  window.setTimeout(function(x){
     console.log('function A');
-     if(player_ans != ans){    
+    console.log(player_ans);
+     if(player_ans != x){    
        jump.restart(); 
      }else{
        jump.revive();
@@ -72,7 +73,7 @@ function reborn(){
         console.log(player_ans);
         console.log(ans);
         jump.stop();
-        check();  
+        check(ans);  
         console.log(player_ans);
         console.log('player');
  
