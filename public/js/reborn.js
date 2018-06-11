@@ -64,13 +64,13 @@ function reborn(){
         console.log(ans);
         jump.stop();
         var player_ans=
-        //while(player_ans ==0){
-        //}
+        while(player_ans ==0){
+          
         //if(player_ans != ans){           //if答案是否正確
          // jump.restart(); 
           //jump.start();
           //return ;
-         //}
+        }
         
         console.log(player_ans);
  
