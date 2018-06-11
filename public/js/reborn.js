@@ -63,7 +63,6 @@ function reborn(){
         console.log(player_ans);
         console.log(ans);
         jump.stop();
-        var player_ans=
         while(player_ans ==0){
           select1.style.display="block";
           select2.style.display="block";
