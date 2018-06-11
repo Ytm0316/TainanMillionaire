@@ -24,7 +24,7 @@ var check = function(x,y){
      }
 //      content.style.display="none";
         var content=document.getElementById("content" + (y));
-        content.style.display="block";
+        content.style.display="none";
         rebor.style.display="none";
         select1.style.display="none";
         select2.style.display="none";
@@ -78,8 +78,8 @@ function reborn(){
         jump.stop();
         check(ans,RandNum);  
  
-        content.style.display="none";
-/*         rebor.style.display="none";
+//      content.style.display="none";
+/*      rebor.style.display="none";
         select1.style.display="none";
         select2.style.display="none";
         select3.style.display="none";
