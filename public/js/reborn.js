@@ -17,9 +17,16 @@ var check = function(){
     console.log('function A');
      if(player_ans != ans){    
        jump.restart(); 
-       jump.start();
-       return ; 
-    }
+     }else{
+       jump.revive();
+     }
+        content.style.display="none";
+        rebor.style.display="none";
+        select1.style.display="none";
+        select2.style.display="none";
+        select3.style.display="none";
+        select4.style.display="none";
+        jump.start();
   }, t * 1000);
 };
  
@@ -32,15 +39,11 @@ function Select4(){ var player_ans= 4;}
     for (i = 0; i < k; i++) {
         q_used[i]=0;
     }
-function check(){
-  RandNum = Math.floor(Math.random()*k);
-  if(q_used[RandNum]== -1)
-  {check();}
-    }
+
 
 
 function reborn(){
-  if(deadtime > 0){
+  if(deadtime > 0){   //if
     rebor.style.display="block";
    
     var question = new Array(k-1); 
@@ -73,7 +76,7 @@ function reborn(){
         console.log(player_ans);
         console.log('player');
  
-        content.style.display="none";
+/*      content.style.display="none";
         rebor.style.display="none";
         select1.style.display="none";
         select2.style.display="none";
@@ -81,7 +84,7 @@ function reborn(){
         select4.style.display="none";
         jump.start();
          
-        jump.revive();
+        jump.revive(); */
   }else{
          for (i = 0; i < k; i++) {
          q_used[i]=0;
@@ -89,6 +92,6 @@ function reborn(){
      deadtime = k;
      jump.restart();
      console.log("456");
-   }
+   } //end if
 }
 
