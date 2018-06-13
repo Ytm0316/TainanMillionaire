@@ -1085,8 +1085,8 @@ var Jump = function(){
 			this.createfloor();
 			this.CameraSetup();
 			this.LightSetup();
-			this.createCube();
-			this.createCube();
+			//this.createCube();
+			//this.createCube();
 			this.horse_create();
 		},
 		cubeRecover:function(){
