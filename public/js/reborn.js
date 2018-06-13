@@ -34,10 +34,31 @@ var check = function(x,y){
   }, t * 1000);
 };
  
-function Select1(){  player_ans= 1;}
-function Select2(){  player_ans= 2;}
-function Select3(){  player_ans= 3;}
-function Select4(){  player_ans= 4;}
+function Select1(){
+ player_ans= 1;
+ select2.style.display="none";
+ select3.style.display="none";
+ select4.style.display="none";
+ 
+}
+function Select2(){
+select1.style.display="none";
+select3.style.display="none";
+select4.style.display="none";
+ player_ans= 2;
+}
+function Select3(){  
+ player_ans= 3;
+select1.style.display="none";
+select2.style.display="none";
+select4.style.display="none";
+}
+function Select4(){  
+ player_ans= 4;
+ select1.style.display="none";
+ select2.style.display="none";
+ select3.style.display="none";
+}
 
 
     for (i = 0; i < k; i++) {
