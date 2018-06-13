@@ -33,6 +33,8 @@ var check = function(x,y){
         jump.start();
   }, t * 1000);
 };
+
+//time count down
  
 function Select1(){
  player_ans= 1;
