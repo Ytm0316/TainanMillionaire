@@ -608,8 +608,8 @@ var Jump = function(){
 					game.createCube();
 					game.updateCamera();
 					game.stage_info.cube++;
-					canvas.addEventListener(game.mouseEvents.down, 	game.downevent);
-					canvas.addEventListener(game.mouseEvents.up, 	game.upevent);
+					//canvas.addEventListener(game.mouseEvents.down, 	game.downevent);
+					//canvas.addEventListener(game.mouseEvents.up, 	game.upevent);
 					if(game.successCallback){
 						game.successCallback();
 					}
@@ -631,8 +631,12 @@ var Jump = function(){
 			var to_z ;
 			var to_x ; 
 			var rotateDone = false;
+			var game = this;
+			var canvas = document.querySelector('canvas');
 			if(this.CubeDir.former==this.CubeDir.current){
 				//no need to change direction
+				canvas.addEventListener(game.mouseEvents.down, 	game.downevent);
+				canvas.addEventListener(game.mouseEvents.up, 	game.upevent);
 			}else{
 				if(this.CubeDir.former=='left'){
 					horse.rotation.z -= 0.1;
@@ -715,6 +719,8 @@ var Jump = function(){
 					});
 				}else{
 					this.renderer.render(this.scene,this.camera);
+					canvas.addEventListener(game.mouseEvents.down, 	game.downevent);
+					canvas.addEventListener(game.mouseEvents.up, 	game.upevent);
 				}
 			}
 		},
