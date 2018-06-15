@@ -1,5 +1,6 @@
 var Jump = function(){
 	this.config = {
+		cube_appear_height : 50,
 		isMobile:false,
 		jumper_length:30,
 		jumper_width:18,
@@ -59,7 +60,10 @@ var Jump = function(){
 		position :new THREE.Vector3(0,0,0),
 	};
 	this.cubeStat = {
-		recovered:true
+		recovered:true,
+		bounced: 0,
+		bounce_falling_speed:-1,
+		bounce_coefficient:0.4
 	};
 	this.CubeDir = {
 		former:'forward',
@@ -76,7 +80,7 @@ var Jump = function(){
 	//			4 落在下個區域 失敗W
 	};
 	this.cameraPos = {
-		current:new THREE.Vector3(-200,200,200),
+		current:new THREE.Vector3(0,200,0),
 		next:new THREE.Vector3(-200,200,200)
 	};
 	this.play = false;
@@ -600,14 +604,16 @@ var Jump = function(){
 				var canvas = document.querySelector('canvas');
 			
 				if(game.land_info.result == 3){
-					canvas.addEventListener(game.mouseEvents.down, 	game.downevent);
-					canvas.addEventListener(game.mouseEvents.up, 	game.upevent);
+					
 					game.createCube();
 					game.updateCamera();
 					game.stage_info.cube++;
+					canvas.addEventListener(game.mouseEvents.down, 	game.downevent);
+					canvas.addEventListener(game.mouseEvents.up, 	game.upevent);
 					if(game.successCallback){
 						game.successCallback();
 					}
+					
 					
 				}else if(game.land_info.result == 1){
 					//nothing. on current cube.no create cube
@@ -754,6 +760,7 @@ var Jump = function(){
 		},
 		updateCamera:function(){//done... floor change too light change too
 			var game = this;
+			var cube = game.cube_set.cube[game.cube_set.cube.length-1];
 			var c = {
 				x: game.cameraPos.current.x,
 				y: game.cameraPos.current.y,
@@ -764,8 +771,18 @@ var Jump = function(){
 				y: game.cameraPos.next.y,
 				z: game.cameraPos.next.z
 			};
-			if(n.x>c.x||n.z>c.z||n.z<c.z){
-				game.cameraPos.current.x +=3;
+			if(cube.position.y > cube.to_y){
+				game.cubeBounce();
+				game.renderer.render(game.scene,game.camera);
+				requestAnimationFrame(function() {
+					game.updateCamera();
+				});
+			}else if(n.x<c.x||n.x>c.x||n.z>c.z||n.z<c.z){
+				if(n.x<=c.x){
+					game.cameraPos.current.x -=3;
+				}else if(n.x>=c.x){
+					game.cameraPos.current.x +=3;
+				}
 				if(n.z>=c.z){
 					game.cameraPos.current.z += 3;
 				}else if(n.z<=c.z){
@@ -809,8 +826,30 @@ var Jump = function(){
 					game.updateCamera();
 				});
 			}else{
-				game.updateHorseDir();
+				game.updateHorseDir();				
 			}
+		},
+		cubeBounce:function(){
+			var game = this;
+			var cube = game.cube_set.cube[game.cube_set.cube.length-1];
+				
+			cube.position.y += game.cubeStat.bounce_falling_speed;
+			game.cubeStat.bounce_falling_speed -= 0.08;
+			
+			if(cube.position.y <= cube.to_y){//on ground
+				game.cubeStat.bounced += 1;
+				game.cubeStat.bounce_falling_speed = -game.cubeStat.bounce_falling_speed * game.cubeStat.bounce_coefficient;
+				
+				if(game.cubeStat.bounced != 3){
+					cube.position.y = cube.to_y + 0.05;
+				}else{
+					game.cubeStat.bounced = 0;
+					game.cubeStat.bounce_falling_speed = -1;
+					cube.position.y = cube.to_y;
+				}
+				
+			}
+			
 		},
 		getRandomColor:function() {
 			var letters = '0123456789ABCDEF';
@@ -872,18 +911,18 @@ var Jump = function(){
 										this.cube_set.cube[this.cube_set.cube.length-1].geometry.parameters.width/2+
 										this.cube_set.cube[this.cube_set.cube.length-1].position.x+
 										Math.random()*90+45;
-					mesh.position.y =  (special) ? magicbox.y:-10;
+					mesh.position.y =  game.config.cube_appear_height;//(special) ? magicbox.y:-10;
 					mesh.position.z =  this.cube_set.cube[this.cube_set.cube.length-1].position.z;				
 				}else if(this.CubeDir.current=='left'){
 					mesh.position.x =  this.cube_set.cube[this.cube_set.cube.length-1].position.x;
-					mesh.position.y =  (special) ? magicbox.y:-10;
+					mesh.position.y =  game.config.cube_appear_height;//(special) ? magicbox.y:-10;
 					mesh.position.z =  (-mesh.geometry.parameters.width/2)-
 										this.cube_set.cube[this.cube_set.cube.length-1].geometry.parameters.width/2+
 										this.cube_set.cube[this.cube_set.cube.length-1].position.z
 										-Math.random()*90-45;
 				}else{
 					mesh.position.x =  this.cube_set.cube[this.cube_set.cube.length-1].position.x;
-					mesh.position.y =  (special) ? magicbox.y:-10;
+					mesh.position.y =  game.config.cube_appear_height;//(special) ? magicbox.y:-10;
 					mesh.position.z =  (mesh.geometry.parameters.width/2)+
 										this.cube_set.cube[this.cube_set.cube.length-1].position.z+
 										this.cube_set.cube[this.cube_set.cube.length-1].geometry.parameters.width/2+
