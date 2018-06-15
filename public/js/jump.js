@@ -62,7 +62,7 @@ var Jump = function(){
 	this.cubeStat = {
 		recovered:true,
 		bounced: 0,
-		bounce_falling_speed:-1,
+		bounce_falling_speed:0,
 		bounce_coefficient:0.4
 	};
 	this.CubeDir = {
@@ -771,13 +771,7 @@ var Jump = function(){
 				y: game.cameraPos.next.y,
 				z: game.cameraPos.next.z
 			};
-			if(cube.position.y > cube.to_y){
-				game.cubeBounce();
-				game.renderer.render(game.scene,game.camera);
-				requestAnimationFrame(function() {
-					game.updateCamera();
-				});
-			}else if(n.x<c.x||n.x>c.x||n.z>c.z||n.z<c.z){
+			if(n.x<c.x||n.x>c.x||n.z>c.z||n.z<c.z){
 				if(n.x<=c.x){
 					game.cameraPos.current.x -=3;
 				}else if(n.x>=c.x){
@@ -825,6 +819,12 @@ var Jump = function(){
 				requestAnimationFrame(function() {
 					game.updateCamera();
 				});
+			}else if(cube.position.y > cube.to_y){
+				game.cubeBounce();
+				game.renderer.render(game.scene,game.camera);
+				requestAnimationFrame(function() {
+					game.updateCamera();
+				});
 			}else{
 				game.updateHorseDir();				
 			}
@@ -834,7 +834,7 @@ var Jump = function(){
 			var cube = game.cube_set.cube[game.cube_set.cube.length-1];
 				
 			cube.position.y += game.cubeStat.bounce_falling_speed;
-			game.cubeStat.bounce_falling_speed -= 0.08;
+			game.cubeStat.bounce_falling_speed -= 0.8;
 			
 			if(cube.position.y <= cube.to_y){//on ground
 				game.cubeStat.bounced += 1;
