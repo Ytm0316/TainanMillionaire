@@ -237,17 +237,17 @@
 
 
 #select1{
-	color:#ffffff;
-	font-size:18px;
+	color:#000000;
+	font-size:20px;
 	text-align:center;
 	line-height:38px;
-	background-color:#ff0000;
-	border-radius: 5px;
-	font-family:arial;
+	background-color:#656464;
+	border-radius: 100px;
+	font-family:Microsoft JhengHei;
 	position:absolute;
 	height:38px;
-	width:375px;
-	top:90%;
+	width:300px;
+	top:65%;
 	left:50%;
 	transform:translate(-50%);
 	cursor:pointer;
