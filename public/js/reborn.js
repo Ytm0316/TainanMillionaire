@@ -42,6 +42,7 @@
 
 function check(){
   if(player_ans != q_ans){    
+       deadtime=1;
        jump.restart(); 
      }else{
        jump.revive();
