@@ -10,7 +10,11 @@
  var select3=document.getElementById("select3");
  var select4=document.getElementById("select4");
 
-var check = function(x,y){
+ var q_ans=0;
+ var q_num=0;
+
+
+/*var check = function(x,y){
   var t = 10;
  
   window.setTimeout(function(){
@@ -33,11 +37,31 @@ var check = function(x,y){
         jump.start();
   }, t * 1000);
 };
-
+*/
 //time count down
- 
+function check(){
+  if(player_ans != q_ans){    
+       jump.restart(); 
+     }else{
+       jump.revive();
+  }
+  var content=document.getElementById("content" + (0));
+  content.style.display="none";
+  rebor.style.display="none";
+  select1.style.display="none";
+  select2.style.display="none";
+  select3.style.display="none";
+  select4.style.display="none";
+  jump.start();
+  q_ans=0;
+  q_num=0;
+  
+}
+
+
 function Select1(){
  player_ans= 1;
+ check();
  select2.style.display="none";
  select3.style.display="none";
  select4.style.display="none";
@@ -48,18 +72,21 @@ select1.style.display="none";
 select3.style.display="none";
 select4.style.display="none";
  player_ans= 2;
+ check();
 }
 function Select3(){  
  player_ans= 3;
 select1.style.display="none";
 select2.style.display="none";
 select4.style.display="none";
+ check();
 }
 function Select4(){  
  player_ans= 4;
  select1.style.display="none";
  select2.style.display="none";
  select3.style.display="none";
+ check();
 }
 
 
@@ -92,12 +119,11 @@ function reborn(){
     question[11] = "荷蘭獨立戰爭爆發後，荷蘭人成立了荷蘭____公司。";
     //問題
     var RandNum = Math.floor(Math.random()*k); //←數字請填寫圖片張數的值
-    if(q_used[RandNum]== -1)
-      {check();}
+    if(q_used[RandNum]== -1){check();}   //?
     deadtime = deadtime - 1 ;
     q_used[RandNum] = -1;
     var ans = RandNum % 4 + 1;
-    var content=document.getElementById("content" + (RandNum));
+    var content=document.getElementById("content" + (0));
         content.style.display="block";
         select1.style.display="block";
         select2.style.display="block";
@@ -108,7 +134,9 @@ function reborn(){
         console.log(player_ans);
         console.log(ans,content);
         jump.stop();
-        check(ans,RandNum);  
+        q_ans=ans;
+        q_num=RandNum;
+        //check(ans,RandNum);  
  
 //      content.style.display="none";
 /*      rebor.style.display="none";
