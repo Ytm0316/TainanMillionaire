@@ -206,27 +206,32 @@
 }
 
 
+
 #reborn{
-	height:25%;
 	position:absolute;
-	top:4%;
+	top:5%;
 	left:50%;
-	transform:translate(-50%);
+	width:50%;
+    	height:50%;
+    	background-image:url(reborn.png);
+    	background-repeat:no-repeat;
+    	background-size:50% 50%;
+	transform:translate(-25%);
 	display:none;
 }
 
 #content0{
-	padding:40px;
+	padding:3%;
 	font-weight:bolder;
 	color:#000000;
 	font-size:20px;
 	text-align:center;
-	line-height:38px;
+	line-height:auto;
 	background-color:#c8c9ca;
 	font-family:Microsoft JhengHei;
 	position:absolute;
-	height:320px;
-	width:300px;
+	height:55%;
+	width:20%;
 	top:30%;
 	left:50%;
 	transform:translate(-50%);
@@ -244,8 +249,8 @@
 	border-radius: 100px;
 	font-family:Microsoft JhengHei;
 	position:absolute;
-	height:38px;
-	width:300px;
+	height:6%;
+	width:22%;
 	top:65%;
 	left:50%;
 	transform:translate(-50%);
@@ -262,8 +267,8 @@
 	border-radius: 100px;
 	font-family:Microsoft JhengHei;
 	position:absolute;
-	height:38px;
-	width:300px;
+	height:6%;
+	width:22%;
 	top:72.5%;
 	left:50%;
 	transform:translate(-50%);
@@ -280,8 +285,8 @@
 	border-radius: 100px;
 	font-family:Microsoft JhengHei;
 	position:absolute;
-	height:38px;
-	width:300px;
+	height:6%;
+	width:22%;
 	top:80%;
 	left:50%;
 	transform:translate(-50%);
@@ -298,8 +303,8 @@
 	border-radius: 100px;
 	font-family:Microsoft JhengHei;
 	position:absolute;
-	height:38px;
-	width:300px;
+	height:6%;
+	width:22%;
 	top:87.5%;
 	left:50%;
 	transform:translate(-50%);
