@@ -226,9 +226,9 @@
 	background-color:#c9c9c9f2;
 	font-family:Microsoft JhengHei;
 	position:absolute;
-	height:300px;
+	height:320px;
 	width:250px;
-	top:25%;
+	top:30%;
 	left:50%;
 	transform:translate(-50%);
 	display:none;
@@ -241,7 +241,7 @@
 	font-size:20px;
 	text-align:center;
 	line-height:38px;
-	background-color:#656464;
+	background-color:#afafaff2;
 	border-radius: 100px;
 	font-family:Microsoft JhengHei;
 	position:absolute;
@@ -259,7 +259,7 @@
 	font-size:20px;
 	text-align:center;
 	line-height:38px;
-	background-color:#656464;
+	background-color:#afafaff2;
 	border-radius: 100px;
 	font-family:Microsoft JhengHei;
 	position:absolute;
@@ -277,7 +277,7 @@
 	font-size:20px;
 	text-align:center;
 	line-height:38px;
-	background-color:#656464;
+	background-color:#afafaff2;
 	border-radius: 100px;
 	font-family:Microsoft JhengHei;
 	position:absolute;
@@ -295,7 +295,7 @@
 	font-size:20px;
 	text-align:center;
 	line-height:38px;
-	background-color:#656464;
+	background-color:#afafaff2;
 	border-radius: 100px;
 	font-family:Microsoft JhengHei;
 	position:absolute;
