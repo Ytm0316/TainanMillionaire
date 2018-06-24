@@ -151,7 +151,7 @@ function reborn(){
          for (i = 0; i < k; i++) {
          q_used[i]=0;
     }
-     deadtime = k;
+     deadtime = 1;
      jump.restart();
      console.log("456");
    } //end if
