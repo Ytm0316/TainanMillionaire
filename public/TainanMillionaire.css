@@ -206,18 +206,17 @@
 }
 
 
+
 #reborn{
-	height:25%;
 	position:absolute;
-	top:4%;
+	top:5%;
 	left:50%;
-	width:400px;
-    	height:120px;
+	width:50%;
+    	height:50%;
     	background-image:url(reborn.png);
     	background-repeat:no-repeat;
-    	border:1px #ccc solid;
-    	background-size:360px 100px;
-	transform:translate(-50%);
+    	background-size:50% 50%;
+	transform:translate(-25%);
 	display:none;
 }
 
@@ -232,7 +231,7 @@
 	font-family:Microsoft JhengHei;
 	position:absolute;
 	height:55%;
-	width:45%;
+	width:20%;
 	top:30%;
 	left:50%;
 	transform:translate(-50%);
@@ -251,7 +250,7 @@
 	font-family:Microsoft JhengHei;
 	position:absolute;
 	height:6%;
-	width:40%;
+	width:22%;
 	top:65%;
 	left:50%;
 	transform:translate(-50%);
@@ -269,7 +268,7 @@
 	font-family:Microsoft JhengHei;
 	position:absolute;
 	height:6%;
-	width:40%;
+	width:22%;
 	top:72.5%;
 	left:50%;
 	transform:translate(-50%);
@@ -287,7 +286,7 @@
 	font-family:Microsoft JhengHei;
 	position:absolute;
 	height:6%;
-	width:40%;
+	width:22%;
 	top:80%;
 	left:50%;
 	transform:translate(-50%);
@@ -305,7 +304,7 @@
 	font-family:Microsoft JhengHei;
 	position:absolute;
 	height:6%;
-	width:40%;
+	width:22%;
 	top:87.5%;
 	left:50%;
 	transform:translate(-50%);
