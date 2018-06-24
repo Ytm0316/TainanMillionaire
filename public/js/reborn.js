@@ -81,10 +81,7 @@ function reborn(){
     question[2] = "C" ;
     question[3] = "D" ;
     question[4] = "E" ;
-    
-    
-    
-    //
+
     var RandNum = Math.floor(Math.random()*k); //←數字請填寫圖片張數的值
     if(q_used[RandNum]== -1)
       {check();}
