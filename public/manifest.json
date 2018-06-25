@@ -1,0 +1,26 @@
+{
+  "name":"Go Provintia",
+  "short_name":"Go Provintia",
+  "start_url":"index.html",
+  "display":"standalone",
+  "background_color":"#ffffff",
+  "description":"Try to jump and find history story by yourself!",
+  "theme_color":"red",
+  "icons":[
+    {
+      "src":"manifest_icon/icon128.png",
+      "sizes":"128x128",
+      "type":"image/png"
+    },
+    {
+      "src":"manifest_icon/icon48.png",
+      "sizes":"48x48",
+      "type":"image/png"
+    },
+    {
+      "src":"manifest_icon/icon16.png",
+      "sizes":"16x16",
+      "type":"image/png"
+    }
+  ]
+}
